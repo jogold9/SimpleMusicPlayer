@@ -24,7 +24,7 @@
             android:textSize="16dp"
             android:paddingLeft="10dp"
             android:textStyle="bold"
-            android:text="Thriller"
+            android:text="Choose menu button on right to begin"
             android:layout_marginTop="10dp"/>
 
         <!-- Playlist button -->
@@ -32,7 +32,7 @@
             android:id="@+id/btnPlaylist"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_action_menu"
             android:background="@null"/>
     </LinearLayout>
 
@@ -44,10 +44,8 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:gravity="center"
-        android:layout_below="@id/player_header_bg">
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@mipmap/ic_launcher"/>
+        android:layout_below="@id/player_header_bg"
+        android:orientation="horizontal">
     </LinearLayout>
 
     <!-- Player Footer -->
@@ -114,7 +112,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
         android:layout_above="@id/player_footer_bg"
-        android:thumb="@mipmap/ic_launcher"
+        android:thumb="@drawable/progress_bar"
         android:progressDrawable="@drawable/seekbar_progress"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"/>
