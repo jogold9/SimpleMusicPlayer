@@ -19,7 +19,7 @@ public class PlayListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playlist);
+        setContentView(R.layout.playlist_item);
 
         ArrayList<HashMap<String, String>> songsListData = new ArrayList<HashMap<String, String>>();
 
@@ -44,9 +44,9 @@ public class PlayListActivity extends ListActivity {
         setListAdapter(adapter);
 
         // selecting single ListView item
-        ListView lv = getListView();
-        // listening to single listitem click
-        lv.setOnItemClickListener(new OnItemClickListener() {
+        ListView listView = getListView();
+        // listening to single list item click
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,

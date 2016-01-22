@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -46,7 +47,7 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.player);
 
         // All player buttons
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
@@ -182,15 +183,15 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
                 if(isRepeat){
                     isRepeat = false;
                     Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
-                    btnRepeat.setImageResource(R.drawable.btn_repeat);
+                    btnRepeat.setImageResource(R.drawable.ic_av_repeat);
                 }else{
                     // make repeat to true
                     isRepeat = true;
                     Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
                     // make shuffle to false
                     isShuffle = false;
-                    btnRepeat.setImageResource(R.drawable.btn_repeat_focused);
-                    btnShuffle.setImageResource(R.drawable.btn_shuffle);
+                    btnRepeat.setImageResource(R.drawable.ic_av_repeat);
+                    btnShuffle.setImageResource(R.drawable.ic_av_shuffle);
                 }
             }
         });
@@ -206,15 +207,15 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
                 if(isShuffle){
                     isShuffle = false;
                     Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
-                    btnShuffle.setImageResource(R.drawable.btn_shuffle);
+                    btnShuffle.setImageResource(R.drawable.ic_av_shuffle);
                 }else{
                     // make repeat to true
                     isShuffle= true;
                     Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
                     // make shuffle to false
                     isRepeat = false;
-                    btnShuffle.setImageResource(R.drawable.btn_shuffle_focused);
-                    btnRepeat.setImageResource(R.drawable.btn_repeat);
+                    btnShuffle.setImageResource(R.drawable.ic_av_shuffle);
+                    btnRepeat.setImageResource(R.drawable.ic_av_repeat);
                 }
             }
         });
@@ -252,7 +253,7 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
             songTitleLabel.setText(songTitle);
 
             // Changing Button Image to pause image
-            btnPlay.setImageResource(R.drawable.btn_pause);
+            btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
 
             // set Progress bar values
             songProgressBar.setProgress(0);
