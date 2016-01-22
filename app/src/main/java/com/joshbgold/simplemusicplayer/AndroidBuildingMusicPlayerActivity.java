@@ -72,12 +72,12 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
         songProgressBar.setOnSeekBarChangeListener(this); // Important
         mp.setOnCompletionListener(this); // Important
 
-        // Getting all songs list
+        // Getting all songs playlist_item
         songsList = songManager.getPlayList();
 
         /**
-         * Button Click event for Play list click event
-         * Launches list activity which displays list of songs
+         * Button Click event for Play playlist_item click event
+         * Launches playlist_item activity which displays playlist_item of songs
          * */
         btnPlaylist.setOnClickListener(new View.OnClickListener() {
 

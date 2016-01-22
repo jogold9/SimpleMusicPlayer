@@ -1,18 +1,20 @@
 package com.joshbgold.simplemusicplayer;
 
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SongsManager {
+
     // SDCard Path
-    final String MEDIA_PATH = new String("/sdcard/");
+    final String MEDIA_PATH = Environment.getExternalStorageDirectory().getPath() + "/";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
 
     // Constructor
     public SongsManager(){
-
     }
 
     /**
@@ -32,7 +34,7 @@ public class SongsManager {
                 songsList.add(song);
             }
         }
-        // return songs list array
+        // return songs playlist_item array
         return songsList;
     }
 
@@ -41,7 +43,7 @@ public class SongsManager {
      * */
     class FileExtensionFilter implements FilenameFilter {
         public boolean accept(File dir, String name) {
-            return (name.endsWith(".mp3") || name.endsWith(".MP3"));
+            return (name.endsWith(".mp3") || name.endsWith(".MP3") || name.endsWith(".wma"));
         }
     }
 }

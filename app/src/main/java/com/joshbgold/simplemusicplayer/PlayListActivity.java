@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PlayListActivity extends ListActivity {
-    // Songs list
+    // Songs playlist_item
     public ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playlist_item);
+        setContentView(R.layout.playlist);
 
         ArrayList<HashMap<String, String>> songsListData = new ArrayList<HashMap<String, String>>();
 
@@ -45,7 +45,7 @@ public class PlayListActivity extends ListActivity {
 
         // selecting single ListView item
         ListView listView = getListView();
-        // listening to single list item click
+        // listening to single playlist_item item click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
