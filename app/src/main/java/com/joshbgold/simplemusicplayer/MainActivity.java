@@ -1,16 +1,19 @@
 package com.joshbgold.simplemusicplayer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +47,14 @@ public class MainActivity extends Activity
     private boolean isShuffle = false;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
+    private Context context;
+
+    public MainActivity(Context context) {
+        this.context = context;
+    }
+
+    public MainActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +111,13 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
+                //String sdCardPath = getSecureDigitalCardPath();
 
+                DirectoryPicker.START_DIR = "/storage/extSdCard/";
                 Intent intent = new Intent(getApplicationContext(), DirectoryPicker.class);
                 // optionally set options here
+                intent.putExtra(DirectoryPicker.START_DIR, true);
+
                 startActivityForResult(intent, DirectoryPicker.PICK_DIRECTORY);
 
             }
@@ -239,6 +254,63 @@ public class MainActivity extends Activity
                 }
             }
         });
+    }
+
+    private String getSecureDigitalCardPath() {
+        String sdpath = "/storage/extSDCard";
+
+        if(new File("/storage/extSdCard/").exists())
+        {
+            sdpath="/storage/extSdCard/";
+            Log.i("SD card path is ", sdpath);
+        }
+        if(new File("/storage/sdcard1/").exists())
+        {
+            sdpath="/storage/sdcard1/";
+            Log.i("SD card path is ",sdpath);
+        }
+        if(new File("/storage/usbcard1/").exists())
+        {
+            sdpath="/storage/usbcard1/";
+            Log.i("SD card path is ",sdpath);
+        }
+        if(new File("/storage/sdcard0/").exists())
+        {
+            sdpath="/storage/sdcard0/";
+            Log.i("SD card path is ",sdpath);
+        }
+
+        if(new File("/storage/Card/").exists())
+        {
+            sdpath="/storage/Card/";
+            Log.i("SD card path is ",sdpath);
+        }
+
+        if(new File("/storage/sdcard/").exists())
+        {
+            sdpath="/storage/sdcard/";
+            Log.i("SD card path is ",sdpath);
+        }
+
+        if(new File("/storage/extSdCard/").exists())
+        {
+            sdpath="/storage/extSdCard/";
+            Log.i("SD card path is ",sdpath);
+        }
+
+        if(new File("/storage/ext_sd/").exists())
+        {
+            sdpath="/storage/ext_sd/";
+            Log.i("SD card path is ",sdpath);
+        }
+
+        if(new File( "/mnt/sdcard/").exists())
+        {
+            sdpath="/mnt/sdcard/";
+            Log.i("SD card path is ",sdpath);
+        }
+
+        return sdpath;
     }
 
     /**

@@ -1,7 +1,5 @@
 package com.joshbgold.simplemusicplayer;
 
-import android.os.Environment;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ import java.util.HashMap;
 public class SongsManager {
 
     // SDCard Path
-    final String MEDIA_PATH = Environment.getExternalStorageDirectory().getPath() + "/";
+    final String MEDIA_PATH = "/storage/extSdCard/music";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
 
     // Constructor

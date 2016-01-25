@@ -41,32 +41,35 @@ THE SOFTWARE.
 
 public class DirectoryPicker extends ListActivity {
 
-	public static final String START_DIR = "startDir";
+	public static String START_DIR = "/storage/extSdCard/";
 	public static final String ONLY_DIRS = "onlyDirs";
 	public static final String SHOW_HIDDEN = "showHidden";
-	public static final String CHOSEN_DIRECTORY = "chosenDir";
+	public static final String CHOSEN_DIRECTORY = "/storage/extSdCard/";
 	public static final int PICK_DIRECTORY = 43522432;
 	private File dir;
-	private boolean showHidden = false;
-	private boolean onlyDirs = true ;
-	
+	private boolean showHidden = true;
+	private boolean onlyDirs = false ;
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         dir = Environment.getExternalStorageDirectory();
+		File startDir = new File("/storage/extSdCard/");
+		dir = startDir;
+
         if (extras != null) {
-        	String preferredStartDir = extras.getString(START_DIR);
-        	showHidden = extras.getBoolean(SHOW_HIDDEN, false);
-        	onlyDirs = extras.getBoolean(ONLY_DIRS, true);
-        	if(preferredStartDir != null) {
+        	//String preferredStartDir = extras.getString(START_DIR);
+        	showHidden = extras.getBoolean(SHOW_HIDDEN, true);
+        	onlyDirs = extras.getBoolean(ONLY_DIRS, false);
+        	/*if(preferredStartDir != null) {
             	File startDir = new File(preferredStartDir);
             	if(startDir.isDirectory()) {
             		dir = startDir;
             	}
-            } 
+            }*/
         }
-        
+
         setContentView(R.layout.folder_chooser_list);
         setTitle(dir.getAbsolutePath());
         Button btnChoose = (Button) findViewById(R.id.btnChoose);
@@ -79,10 +82,10 @@ public class DirectoryPicker extends ListActivity {
             	returnDir(dir.getAbsolutePath());
             }
         });
-        
-        ListView lv = getListView();
-        lv.setTextFilterEnabled(true);
-        
+
+        ListView listView = getListView();
+        listView.setTextFilterEnabled(true);
+
         if(!dir.canRead()) {
         	Context context = getApplicationContext();
         	String msg = "Could not read folder contents.";
@@ -90,26 +93,26 @@ public class DirectoryPicker extends ListActivity {
         	toast.show();
         	return;
         }
-        
+
         final ArrayList<File> files = filter(dir.listFiles(), onlyDirs, showHidden);
         String[] names = names(files);
         setListAdapter(new ArrayAdapter<String>(this, R.layout.folder_list_item, names));
-        
 
-        lv.setOnItemClickListener(new OnItemClickListener() {
-        	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		if(!files.get(position).isDirectory())
-        			return;
-        		String path = files.get(position).getAbsolutePath();
-                Intent intent = new Intent(DirectoryPicker.this, DirectoryPicker.class);
-                intent.putExtra(DirectoryPicker.START_DIR, path);
-                intent.putExtra(DirectoryPicker.SHOW_HIDDEN, showHidden);
-                intent.putExtra(DirectoryPicker.ONLY_DIRS, onlyDirs);
-                startActivityForResult(intent, PICK_DIRECTORY);
-        	}
-        });
+
+        listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if (!files.get(position).isDirectory())
+					return;
+				String path = files.get(position).getAbsolutePath();
+				Intent intent = new Intent(DirectoryPicker.this, DirectoryPicker.class);
+				intent.putExtra(DirectoryPicker.START_DIR, path);
+				intent.putExtra(DirectoryPicker.SHOW_HIDDEN, showHidden);
+				intent.putExtra(DirectoryPicker.ONLY_DIRS, onlyDirs);
+				startActivityForResult(intent, PICK_DIRECTORY);
+			}
+		});
     }
-	
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if(requestCode == PICK_DIRECTORY && resultCode == RESULT_OK) {
@@ -118,12 +121,12 @@ public class DirectoryPicker extends ListActivity {
 	        returnDir(path);
     	}
     }
-	
+
     private void returnDir(String path) {
     	Intent result = new Intent();
     	result.putExtra(CHOSEN_DIRECTORY, path);
         setResult(RESULT_OK, result);
-    	finish();    	
+    	finish();
     }
 
 	public ArrayList<File> filter(File[] file_list, boolean onlyDirs, boolean showHidden) {
@@ -138,7 +141,7 @@ public class DirectoryPicker extends ListActivity {
 		Collections.sort(files);
 		return files;
 	}
-	
+
 	public String[] names(ArrayList<File> files) {
 		String[] names = new String[files.size()];
 		int i = 0;
