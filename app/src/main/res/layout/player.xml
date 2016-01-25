@@ -24,7 +24,6 @@
             android:textSize="16dp"
             android:paddingLeft="10dp"
             android:textStyle="bold"
-            android:text="Choose button on right to begin"
             android:layout_marginTop="10dp"/>
 
         <!-- Playlist button -->
@@ -34,6 +33,12 @@
             android:layout_height="fill_parent"
             android:src="@drawable/ic_action_menu"
             android:background="@null"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/folder_icon"
+            android:id="@+id/folder_icon"
+            />
     </LinearLayout>
 
     <!-- Song Thumbnail Image -->

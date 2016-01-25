@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class AndroidBuildingMusicPlayerActivity extends Activity
+public class MainActivity extends Activity
         implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
 
     private ImageButton btnPlay;
@@ -27,6 +27,7 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
     private ImageButton btnPlaylist;
     private ImageButton btnRepeat;
     private ImageButton btnShuffle;
+    private ImageButton folder_icon;
     private SeekBar songProgressBar;
     private TextView songTitleLabel;
     private TextView songCurrentDurationLabel;
@@ -58,6 +59,7 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
         btnPlaylist = (ImageButton) findViewById(R.id.btnPlaylist);
         btnRepeat = (ImageButton) findViewById(R.id.btnRepeat);
         btnShuffle = (ImageButton) findViewById(R.id.btnShuffle);
+        folder_icon = (ImageButton) findViewById(R.id.folder_icon);
         songProgressBar = (SeekBar) findViewById(R.id.songProgressBar);
         songTitleLabel = (TextView) findViewById(R.id.songTitle);
         songCurrentDurationLabel = (TextView) findViewById(R.id.songCurrentDurationLabel);
@@ -83,8 +85,26 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                Intent i = new Intent(getApplicationContext(), PlayListActivity.class);
-                startActivityForResult(i, 100);
+
+                    Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
+                    startActivityForResult(intent, 100);
+
+            }
+        });
+
+        /**
+         * Button Click event for choosing a folder where music is kept
+         * More info on Directory Picker can be found here: https://www.bgreco.net/directorypicker/readme.html
+         * */
+        folder_icon.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+                Intent intent = new Intent(getApplicationContext(), DirectoryPicker.class);
+                // optionally set options here
+                startActivityForResult(intent, DirectoryPicker.PICK_DIRECTORY);
+
             }
         });
 
@@ -226,13 +246,17 @@ public class AndroidBuildingMusicPlayerActivity extends Activity
      * and play the song
      * */
     @Override
-    protected void onActivityResult(int requestCode,
-                                    int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 100){
             currentSongIndex = data.getExtras().getInt("songIndex");
             // play selected song
             playSong(currentSongIndex);
+        }
+        if(requestCode == DirectoryPicker.PICK_DIRECTORY && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            String path = (String) extras.get(DirectoryPicker.CHOSEN_DIRECTORY);
+            // do stuff with path
         }
 
     }
