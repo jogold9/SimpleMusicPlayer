@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,18 +34,20 @@ public class MainActivity extends Activity
     private TextView songCurrentDurationLabel;
     private TextView songTotalDurationLabel;
     // Media Player
-    private  MediaPlayer mp;
+    private MediaPlayer mediaPlayer;
     // Handler to update UI timer, progress bar etc,.
-    private Handler mHandler = new Handler();;
+    private Handler mHandler = new Handler();
+    ;
     private SongsManager songManager;
     private Utilities utils;
     private int seekForwardTime = 5000; // 5000 milliseconds
     private int seekBackwardTime = 5000; // 5000 milliseconds
     private int currentSongIndex = 0;
-    private boolean isShuffle = false;
+    private boolean isShuffle = true;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
     private Context context;
+    private int song_position;
 
     public MainActivity(Context context) {
         this.context = context;
@@ -77,13 +77,13 @@ public class MainActivity extends Activity
         songTotalDurationLabel = (TextView) findViewById(R.id.songTotalDurationLabel);
 
         // Mediaplayer
-        mp = new MediaPlayer();
+        mediaPlayer = new MediaPlayer();
         songManager = new SongsManager();
         utils = new Utilities();
 
         // Listeners
         songProgressBar.setOnSeekBarChangeListener(this); // Important
-        mp.setOnCompletionListener(this); // Important
+        mediaPlayer.setOnCompletionListener(this); // Important
 
         // Getting all songs playlist_item
         songsList = songManager.getPlayList();
@@ -97,8 +97,8 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View arg0) {
 
-                    Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
-                    startActivityForResult(intent, 100);
+                Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
+                startActivityForResult(intent, 100);
 
             }
         });
@@ -111,15 +111,29 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                //String sdCardPath = getSecureDigitalCardPath();
+                //TODO: Select folder for music (http://www.codeproject.com/Articles/547636/Android-Ready-to-use-simple-directory-chooser-dial)
 
-                DirectoryPicker.START_DIR = "/storage/extSdCard/";
-                Intent intent = new Intent(getApplicationContext(), DirectoryPicker.class);
-                // optionally set options here
-                intent.putExtra(DirectoryPicker.START_DIR, true);
+            }
+        });
 
-                startActivityForResult(intent, DirectoryPicker.PICK_DIRECTORY);
+        /**
+         * Play button click event
+         * Plays & stops songs
+         * */
 
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+                    song_position = mediaPlayer.getCurrentPosition();
+                    btnPlay.setImageResource(R.drawable.ic_av_play_circle_fill);
+                }
+                else{
+                    mediaPlayer.seekTo(song_position);
+                    mediaPlayer.start();
+                    btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
+                }
             }
         });
 
@@ -131,15 +145,18 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                // get current song position
-                int currentPosition = mp.getCurrentPosition();
-                // check if seekForward time is lesser than song duration
-                if(currentPosition + seekForwardTime <= mp.getDuration()){
-                    // forward song
-                    mp.seekTo(currentPosition + seekForwardTime);
-                }else{
-                    // forward to end position
-                    mp.seekTo(mp.getDuration());
+
+                if (mediaPlayer.isPlaying()) {
+                    // get current song position
+                    int currentPosition = mediaPlayer.getCurrentPosition();
+                    // check if seekForward time is lesser than song duration
+                    if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
+                        // forward song
+                        mediaPlayer.seekTo(currentPosition + seekForwardTime);
+                    } else {
+                        // forward to end position
+                        mediaPlayer.seekTo(mediaPlayer.getDuration());
+                    }
                 }
             }
         });
@@ -152,17 +169,18 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                // get current song position
-                int currentPosition = mp.getCurrentPosition();
-                // check if seekBackward time is greater than 0 sec
-                if(currentPosition - seekBackwardTime >= 0){
-                    // forward song
-                    mp.seekTo(currentPosition - seekBackwardTime);
-                }else{
-                    // backward to starting position
-                    mp.seekTo(0);
+                if (mediaPlayer.isPlaying()) {
+                    // get current song position
+                    int currentPosition = mediaPlayer.getCurrentPosition();
+                    // check if seekBackward time is greater than 0 sec
+                    if (currentPosition - seekBackwardTime >= 0) {
+                        // forward song
+                        mediaPlayer.seekTo(currentPosition - seekBackwardTime);
+                    } else {
+                        // backward to starting position
+                        mediaPlayer.seekTo(0);
+                    }
                 }
-
             }
         });
 
@@ -174,16 +192,18 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                // check if next song is there or not
-                if(currentSongIndex < (songsList.size() - 1)){
-                    playSong(currentSongIndex + 1);
-                    currentSongIndex = currentSongIndex + 1;
-                }else{
-                    // play first song
-                    playSong(0);
-                    currentSongIndex = 0;
-                }
 
+                if (mediaPlayer.isPlaying()) {
+                    // check if next song is there or not
+                    if (currentSongIndex < (songsList.size() - 1)) {
+                        playSong(currentSongIndex + 1);
+                        currentSongIndex = currentSongIndex + 1;
+                    } else {
+                        // play first song
+                        playSong(0);
+                        currentSongIndex = 0;
+                    }
+                }
             }
         });
 
@@ -195,15 +215,17 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                if(currentSongIndex > 0){
-                    playSong(currentSongIndex - 1);
-                    currentSongIndex = currentSongIndex - 1;
-                }else{
-                    // play last song
-                    playSong(songsList.size() - 1);
-                    currentSongIndex = songsList.size() - 1;
-                }
 
+                if (mediaPlayer.isPlaying()) {
+                    if (currentSongIndex > 0) {
+                        playSong(currentSongIndex - 1);
+                        currentSongIndex = currentSongIndex - 1;
+                    } else {
+                        // play last song
+                        playSong(songsList.size() - 1);
+                        currentSongIndex = songsList.size() - 1;
+                    }
+                }
             }
         });
 
@@ -215,11 +237,11 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                if(isRepeat){
+                if (isRepeat) {
                     isRepeat = false;
                     Toast.makeText(getApplicationContext(), "Repeat is OFF", Toast.LENGTH_SHORT).show();
                     btnRepeat.setImageResource(R.drawable.ic_av_repeat);
-                }else{
+                } else {
                     // make repeat to true
                     isRepeat = true;
                     Toast.makeText(getApplicationContext(), "Repeat is ON", Toast.LENGTH_SHORT).show();
@@ -239,13 +261,13 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                if(isShuffle){
+                if (isShuffle) {
                     isShuffle = false;
                     Toast.makeText(getApplicationContext(), "Shuffle is OFF", Toast.LENGTH_SHORT).show();
                     btnShuffle.setImageResource(R.drawable.ic_av_shuffle);
-                }else{
+                } else {
                     // make repeat to true
-                    isShuffle= true;
+                    isShuffle = true;
                     Toast.makeText(getApplicationContext(), "Shuffle is ON", Toast.LENGTH_SHORT).show();
                     // make shuffle to false
                     isRepeat = false;
@@ -256,94 +278,32 @@ public class MainActivity extends Activity
         });
     }
 
-    private String getSecureDigitalCardPath() {
-        String sdpath = "/storage/extSDCard";
-
-        if(new File("/storage/extSdCard/").exists())
-        {
-            sdpath="/storage/extSdCard/";
-            Log.i("SD card path is ", sdpath);
-        }
-        if(new File("/storage/sdcard1/").exists())
-        {
-            sdpath="/storage/sdcard1/";
-            Log.i("SD card path is ",sdpath);
-        }
-        if(new File("/storage/usbcard1/").exists())
-        {
-            sdpath="/storage/usbcard1/";
-            Log.i("SD card path is ",sdpath);
-        }
-        if(new File("/storage/sdcard0/").exists())
-        {
-            sdpath="/storage/sdcard0/";
-            Log.i("SD card path is ",sdpath);
-        }
-
-        if(new File("/storage/Card/").exists())
-        {
-            sdpath="/storage/Card/";
-            Log.i("SD card path is ",sdpath);
-        }
-
-        if(new File("/storage/sdcard/").exists())
-        {
-            sdpath="/storage/sdcard/";
-            Log.i("SD card path is ",sdpath);
-        }
-
-        if(new File("/storage/extSdCard/").exists())
-        {
-            sdpath="/storage/extSdCard/";
-            Log.i("SD card path is ",sdpath);
-        }
-
-        if(new File("/storage/ext_sd/").exists())
-        {
-            sdpath="/storage/ext_sd/";
-            Log.i("SD card path is ",sdpath);
-        }
-
-        if(new File( "/mnt/sdcard/").exists())
-        {
-            sdpath="/mnt/sdcard/";
-            Log.i("SD card path is ",sdpath);
-        }
-
-        return sdpath;
-    }
-
     /**
      * Receiving song index from playlist view
      * and play the song
-     * */
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 100){
+        if (resultCode == 100) {
             currentSongIndex = data.getExtras().getInt("songIndex");
             // play selected song
             playSong(currentSongIndex);
         }
-        if(requestCode == DirectoryPicker.PICK_DIRECTORY && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            String path = (String) extras.get(DirectoryPicker.CHOSEN_DIRECTORY);
-            // do stuff with path
-        }
-
     }
 
     /**
      * Function to play a song
+     *
      * @param songIndex - index of song
-     * */
-    public void  playSong(int songIndex){
+     */
+    public void playSong(int songIndex) {
         // Play song
         try {
-            mp.reset();
-            mp.setDataSource(songsList.get(songIndex).get("songPath"));
-            mp.prepare();
-            mp.start();
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(songsList.get(songIndex).get("songPath"));
+            mediaPlayer.prepare();
+            mediaPlayer.start();
             // Displaying Song title
             String songTitle = songsList.get(songIndex).get("songTitle");
             songTitleLabel.setText(songTitle);
@@ -368,26 +328,26 @@ public class MainActivity extends Activity
 
     /**
      * Update timer on seekbar
-     * */
+     */
     public void updateProgressBar() {
         mHandler.postDelayed(mUpdateTimeTask, 100);
     }
 
     /**
      * Background Runnable thread
-     * */
+     */
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
-            long totalDuration = mp.getDuration();
-            long currentDuration = mp.getCurrentPosition();
+            long totalDuration = mediaPlayer.getDuration();
+            long currentDuration = mediaPlayer.getCurrentPosition();
 
             // Displaying Total Duration time
-            songTotalDurationLabel.setText(""+utils.milliSecondsToTimer(totalDuration));
+            songTotalDurationLabel.setText("" + utils.milliSecondsToTimer(totalDuration));
             // Displaying time completed playing
-            songCurrentDurationLabel.setText(""+utils.milliSecondsToTimer(currentDuration));
+            songCurrentDurationLabel.setText("" + utils.milliSecondsToTimer(currentDuration));
 
             // Updating progress bar
-            int progress = (int)(utils.getProgressPercentage(currentDuration, totalDuration));
+            int progress = (int) (utils.getProgressPercentage(currentDuration, totalDuration));
             //Log.d("Progress", ""+progress);
             songProgressBar.setProgress(progress);
 
@@ -406,7 +366,7 @@ public class MainActivity extends Activity
 
     /**
      * When user starts moving the progress handler
-     * */
+     */
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         // remove message Handler from updating progress bar
@@ -415,15 +375,15 @@ public class MainActivity extends Activity
 
     /**
      * When user stops moving the progress hanlder
-     * */
+     */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         mHandler.removeCallbacks(mUpdateTimeTask);
-        int totalDuration = mp.getDuration();
+        int totalDuration = mediaPlayer.getDuration();
         int currentPosition = utils.progressToTimer(seekBar.getProgress(), totalDuration);
 
         // forward or backward to certain seconds
-        mp.seekTo(currentPosition);
+        mediaPlayer.seekTo(currentPosition);
 
         // update timer progress again
         updateProgressBar();
@@ -433,25 +393,25 @@ public class MainActivity extends Activity
      * On Song Playing completed
      * if repeat is ON play same song again
      * if shuffle is ON play random song
-     * */
+     */
     @Override
     public void onCompletion(MediaPlayer arg0) {
 
         // check for repeat is ON or OFF
-        if(isRepeat){
+        if (isRepeat) {
             // repeat is on play same song again
             playSong(currentSongIndex);
-        } else if(isShuffle){
+        } else if (isShuffle) {
             // shuffle is on - play a random song
             Random rand = new Random();
             currentSongIndex = rand.nextInt((songsList.size() - 1) - 0 + 1) + 0;
             playSong(currentSongIndex);
-        } else{
+        } else {
             // no repeat or shuffle ON - play next song
-            if(currentSongIndex < (songsList.size() - 1)){
+            if (currentSongIndex < (songsList.size() - 1)) {
                 playSong(currentSongIndex + 1);
                 currentSongIndex = currentSongIndex + 1;
-            }else{
+            } else {
                 // play first song
                 playSong(0);
                 currentSongIndex = 0;
