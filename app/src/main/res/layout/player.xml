@@ -35,9 +35,10 @@
             android:background="@null"/>
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/folder_icon"
+            android:layout_height="fill_parent"
+            android:src="@drawable/ic_file_folder"
             android:id="@+id/folder_icon"
+            android:background="@null"
             />
     </LinearLayout>
 
