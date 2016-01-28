@@ -25,6 +25,7 @@ public class PlayListActivity extends ListActivity {
     public ArrayList<HashMap<String, String>> songsList = new ArrayList<>();  //stores all the songs
     public ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();  //stores songs that match search
     private int songsAddedCounter = 0;  //counter for debugging -> are songs being added to list?
+    private boolean listIsFiltered = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,16 +51,27 @@ public class PlayListActivity extends ListActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                String songTitle = "";
+                                                String songPath = "";
+                                                int songIndex = position;
 
-                                                int songIndex = position; // getting list item index
+                                                HashMap<String, String> song = (HashMap<String, String>) parent.getItemAtPosition(position);
+                                                songTitle = song.get("songTitle");
+                                                songPath = song.get("songPath");
 
                                                 // Starting new intent
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                                // Sending songIndex to PlayerActivity
+
+                                                // Sending song path and song title to MainActivity
                                                 intent.putExtra("songIndex", songIndex);
+                                                intent.putExtra("songTitle", songTitle);
+                                                intent.putExtra("songPath", songPath);
+
                                                 setResult(100, intent);
+
                                                 // Closing PlayListView
                                                 finish();
+
                                             }
                                         }
 
@@ -74,6 +86,7 @@ public class PlayListActivity extends ListActivity {
                 String text = editSearch.getText().toString().toLowerCase(Locale.getDefault());
                 filteredSongsList = songsManager.filter(text);
                 updateListViewUsingSongs();
+                listIsFiltered = true;
             }
         });
     }
@@ -100,6 +113,7 @@ public class PlayListActivity extends ListActivity {
 
         songsAddedCounter = 0;
         songsListData.clear();  //super important that we start from zero, and add only the filtered songs!
+        songsList.clear(); //TODO: Is this line needed??
 
         // looping through playlist
         for (int i = 0; i < filteredSongsList.size(); i++) {
@@ -121,4 +135,5 @@ public class PlayListActivity extends ListActivity {
         setListAdapter(simpleAdapter);
         simpleAdapter.notifyDataSetChanged();
     }
+
 }

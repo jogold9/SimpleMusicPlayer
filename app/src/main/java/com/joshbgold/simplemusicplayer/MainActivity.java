@@ -45,6 +45,8 @@ public class MainActivity extends Activity
     private int seekForwardTime = 5000; // 5000 milliseconds
     private int seekBackwardTime = 5000; // 5000 milliseconds
     private int currentSongIndex = 0;
+    private String songTitle = "";
+    private String songPath = "";
     private boolean isShuffle = true;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
@@ -198,11 +200,11 @@ public class MainActivity extends Activity
                 if (mediaPlayer.isPlaying()) {
                     // check if next song is there or not
                     if (currentSongIndex < (songsList.size() - 1)) {
-                        playSong(currentSongIndex + 1);
+                        playSong(currentSongIndex + 1, songTitle, songPath);
                         currentSongIndex = currentSongIndex + 1;
                     } else {
                         // play first song
-                        playSong(0);
+                        playSong(0, songTitle, songPath);
                         currentSongIndex = 0;
                     }
                 }
@@ -220,11 +222,11 @@ public class MainActivity extends Activity
 
                 if (mediaPlayer.isPlaying()) {
                     if (currentSongIndex > 0) {
-                        playSong(currentSongIndex - 1);
+                        playSong(currentSongIndex - 1, songTitle, songPath);
                         currentSongIndex = currentSongIndex - 1;
                     } else {
                         // play last song
-                        playSong(songsList.size() - 1);
+                        playSong(songsList.size() - 1, songTitle, songPath);
                         currentSongIndex = songsList.size() - 1;
                     }
                 }
@@ -289,25 +291,25 @@ public class MainActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
             currentSongIndex = data.getExtras().getInt("songIndex");
+            songTitle = data.getExtras().getString("songTitle");
+            songPath = data.getExtras().getString("songPath");
             // play selected song
-            playSong(currentSongIndex);
+            playSong(currentSongIndex, songTitle, songPath);
         }
     }
 
     /**
      * Function to play a song
-     *
-     * @param songIndex - index of song
      */
-    public void playSong(int songIndex) {
+    public void playSong(int songIndex, String songTitle, String songPath) {
         // Play song
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(songsList.get(songIndex).get("songPath"));
+            mediaPlayer.setDataSource(songPath);
             mediaPlayer.prepare();
             mediaPlayer.start();
+
             // Displaying Song title
-            String songTitle = songsList.get(songIndex).get("songTitle");
             songTitleLabel.setText(songTitle);
 
             // Changing Button Image to pause image
@@ -398,20 +400,20 @@ public class MainActivity extends Activity
         // check for repeat is ON or OFF
         if (isRepeat) {
             // repeat is on play same song again
-            playSong(currentSongIndex);
+            playSong(currentSongIndex, songTitle, songPath);
         } else if (isShuffle) {
             // shuffle is on - play a random song
             Random rand = new Random();
             currentSongIndex = rand.nextInt((songsList.size() - 1) - 0 + 1) + 0;
-            playSong(currentSongIndex);
+            playSong(currentSongIndex, songTitle, songPath);
         } else {
             // no repeat or shuffle ON - play next song
             if (currentSongIndex < (songsList.size() - 1)) {
-                playSong(currentSongIndex + 1);
+                playSong(currentSongIndex + 1, songTitle, songPath);
                 currentSongIndex = currentSongIndex + 1;
             } else {
                 // play first song
-                playSong(0);
+                playSong(0, songTitle, songPath);
                 currentSongIndex = 0;
             }
         }
