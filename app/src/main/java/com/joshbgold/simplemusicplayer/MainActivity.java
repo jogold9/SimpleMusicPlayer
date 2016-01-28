@@ -20,6 +20,7 @@ import java.util.Random;
 public class MainActivity extends Activity
         implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
 
+    //variables for layout items
     private ImageButton btnPlay;
     private ImageButton btnForward;
     private ImageButton btnBackward;
@@ -33,11 +34,12 @@ public class MainActivity extends Activity
     private TextView songTitleLabel;
     private TextView songCurrentDurationLabel;
     private TextView songTotalDurationLabel;
+
     // Media Player
     private MediaPlayer mediaPlayer;
     // Handler to update UI timer, progress bar etc,.
     private Handler mHandler = new Handler();
-    ;
+
     private SongsManager songManager;
     private Utilities utils;
     private int seekForwardTime = 5000; // 5000 milliseconds
@@ -45,7 +47,7 @@ public class MainActivity extends Activity
     private int currentSongIndex = 0;
     private boolean isShuffle = true;
     private boolean isRepeat = false;
-    private ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private Context context;
     private int song_position;
 
@@ -317,11 +319,7 @@ public class MainActivity extends Activity
 
             // Updating progress bar
             updateProgressBar();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -417,5 +415,11 @@ public class MainActivity extends Activity
                 currentSongIndex = 0;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
     }
 }
