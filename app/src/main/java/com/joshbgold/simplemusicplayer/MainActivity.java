@@ -1,5 +1,10 @@
 package com.joshbgold.simplemusicplayer;
 
+/**
+ * Based on code from Ravi Tamada http://www.androidhive.info/2012/03/android-building-audio-player-tutorial/
+ * I added the search feature. Feature to select media source in progress.
+ * */
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +52,7 @@ public class MainActivity extends Activity
     private int currentSongIndex = 0;
     private String songTitle = "";
     private String songPath = "";
+    private String songUniqueID = "";
     private boolean isShuffle = true;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
@@ -291,6 +297,7 @@ public class MainActivity extends Activity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
             currentSongIndex = data.getExtras().getInt("songIndex");
+            //songUniqueID = data.getExtras().getString("songUniqueID");
             songTitle = data.getExtras().getString("songTitle");
             songPath = data.getExtras().getString("songPath");
             // play selected song
@@ -305,12 +312,13 @@ public class MainActivity extends Activity
         // Play song
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(songPath);
+            //mediaPlayer.setDataSource(songPath);
+            mediaPlayer.setDataSource(songsList.get(songIndex).get("songPath"));
             mediaPlayer.prepare();
             mediaPlayer.start();
 
             // Displaying Song title
-            songTitleLabel.setText(songTitle);
+            songTitleLabel.setText(songsList.get(songIndex).get("songTitle"));
 
             // Changing Button Image to pause image
             btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
@@ -347,7 +355,7 @@ public class MainActivity extends Activity
             songCurrentDurationLabel.setText("" + utils.milliSecondsToTimer(currentDuration));
 
             // Updating progress bar
-            int progress = (int) (utils.getProgressPercentage(currentDuration, totalDuration));
+            int progress = utils.getProgressPercentage(currentDuration, totalDuration);
             //Log.d("Progress", ""+progress);
             songProgressBar.setProgress(progress);
 
@@ -404,7 +412,7 @@ public class MainActivity extends Activity
         } else if (isShuffle) {
             // shuffle is on - play a random song
             Random rand = new Random();
-            currentSongIndex = rand.nextInt((songsList.size() - 1) - 0 + 1) + 0;
+            currentSongIndex = rand.nextInt((songsList.size() - 1) + 1);
             playSong(currentSongIndex, songTitle, songPath);
         } else {
             // no repeat or shuffle ON - play next song

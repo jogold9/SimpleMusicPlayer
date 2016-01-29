@@ -25,7 +25,7 @@ public class PlayListActivity extends ListActivity {
     public ArrayList<HashMap<String, String>> songsList = new ArrayList<>();  //stores all the songs
     public ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();  //stores songs that match search
     private int songsAddedCounter = 0;  //counter for debugging -> are songs being added to list?
-    private boolean listIsFiltered = false;
+    public boolean listIsFiltered = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,13 +51,17 @@ public class PlayListActivity extends ListActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                String songTitle = "";
-                                                String songPath = "";
-                                                int songIndex = position;
+                                                String songTitle;
+                                                String songPath;
+                                                String songUniqueID;
+                                                int songIndex;
 
                                                 HashMap<String, String> song = (HashMap<String, String>) parent.getItemAtPosition(position);
                                                 songTitle = song.get("songTitle");
                                                 songPath = song.get("songPath");
+                                                songUniqueID = song.get("songUniqueID");
+
+                                                songIndex = Integer.parseInt(songUniqueID);
 
                                                 // Starting new intent
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);

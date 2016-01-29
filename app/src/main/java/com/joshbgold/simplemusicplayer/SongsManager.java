@@ -10,17 +10,13 @@ public class SongsManager {
 
     private HashMap<String, String> song;
     private String songString;
+    private String uniqueSongIDString = "0";
 
     // SDCard Path
     final String MEDIA_PATH = "/storage/extSdCard/music";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();
 
-
-    // Constructors
-    public SongsManager(String song) {
-        this.songString = songString;
-    }
 
     public SongsManager() {
     }
@@ -32,11 +28,21 @@ public class SongsManager {
     public ArrayList<HashMap<String, String>> getPlayList() {
         File home = new File(MEDIA_PATH);
 
+        uniqueSongIDString = "0";
+        int uniqueSongIDInt = 0;
+
+        if (songsList != null){
+            songsList.clear();
+        }
+
         if (home.listFiles(new FileExtensionFilter()).length > 0) {
             for (File file : home.listFiles(new FileExtensionFilter())) {
                 HashMap<String, String> song = new HashMap<>();
                 song.put("songTitle", file.getName().substring(0, (file.getName().length() - 4)));
                 song.put("songPath", file.getPath());
+                song.put("songUniqueID", uniqueSongIDString);
+                uniqueSongIDInt++;
+                uniqueSongIDString = String.valueOf(uniqueSongIDInt);
 
                 // Adding each song to SongList
                 songsList.add(song);
