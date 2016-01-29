@@ -39,7 +39,8 @@ public class SongsManager {
             for (File file : home.listFiles(new FileExtensionFilter())) {
                 song = new HashMap<>();
 
-                songTitle = file.getName().substring(0, (file.getName().length() - 4));
+                //songTitle = file.getName().substring(0, (file.getName().length() - 4));  //not necessary to omit the file type
+                songTitle = file.getName();
 
                 //remove track numbers from song titles
                 songTitle = songTitle.replaceFirst("^\\d*\\s", "");  //replaces leading digits & following space
