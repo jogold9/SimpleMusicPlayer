@@ -8,8 +8,8 @@ import java.util.Locale;
 
 public class SongsManager {
 
-    private HashMap<String, String> song;
-    private String songString;
+    public HashMap<String, String> song;
+    public String songTitle;
     private String uniqueSongIDString = "0";
 
     // SDCard Path
@@ -37,8 +37,15 @@ public class SongsManager {
 
         if (home.listFiles(new FileExtensionFilter()).length > 0) {
             for (File file : home.listFiles(new FileExtensionFilter())) {
-                HashMap<String, String> song = new HashMap<>();
-                song.put("songTitle", file.getName().substring(0, (file.getName().length() - 4)));
+                song = new HashMap<>();
+
+                songTitle = file.getName().substring(0, (file.getName().length() - 4));
+
+                //remove track numbers from song titles
+                songTitle = songTitle.replaceFirst("^\\d*\\s", "");  //replaces leading digits & following space
+                songTitle = songTitle.replaceFirst("^\\d*\\-\\d*", "");  //replaces leading digits, following hyphen, and following digits
+
+                song.put("songTitle", songTitle);
                 song.put("songPath", file.getPath());
                 song.put("songUniqueID", uniqueSongIDString);
                 uniqueSongIDInt++;
@@ -50,10 +57,6 @@ public class SongsManager {
         }
         // return songs playlist_item array
         return songsList;
-    }
-
-    public String getSong() {
-        return this.songString;
     }
 
     /**
