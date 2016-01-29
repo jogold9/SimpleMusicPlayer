@@ -28,6 +28,9 @@ import java.util.Random;
 public class MainActivity extends Activity
         implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
 
+    private static final int REQUEST_SAVE = 101;
+    private static final int REQUEST_LOAD = 102;
+
     //variables for layout items
     private ImageButton btnPlay;
     private ImageButton btnForward;
@@ -61,6 +64,7 @@ public class MainActivity extends Activity
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private Context context;
     private int song_position;
+    public String folderPath = "";
 
     public MainActivity(Context context) {
         this.context = context;
@@ -72,7 +76,7 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.main);
 
         ActionBar bar = getActionBar();
         if (bar != null) {
@@ -96,7 +100,7 @@ public class MainActivity extends Activity
 
         // Mediaplayer
         mediaPlayer = new MediaPlayer();
-        songManager = new SongsManager();
+        songManager = new SongsManager(context);
         utils = new Utilities();
 
         // Listeners
@@ -129,8 +133,14 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-                //TODO: Select folder for music (http://www.codeproject.com/Articles/547636/Android-Ready-to-use-simple-directory-chooser-dial)
+            //TODO: Select folder for music (https://code.google.com/archive/p/android-file-dialog/)
+                Intent intent = new Intent(getBaseContext(), FileDialog.class); intent.putExtra(FileDialog.START_PATH, "/");
 
+                //can user select directories or not
+                intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+                intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);  //Prevents new items creation.  Users can only select existing.
+
+                startActivityForResult(intent, REQUEST_SAVE);
             }
         });
 
@@ -311,6 +321,23 @@ public class MainActivity extends Activity
             // play selected song
             playSong(currentSongIndex, songTitle, songPath);
         }
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == REQUEST_SAVE) {
+                System.out.println("Saving...");
+            } else if (requestCode == REQUEST_LOAD) {
+                System.out.println("Loading...");
+            }
+
+            folderPath = data.getStringExtra(FileDialog.RESULT_PATH);
+
+        }
+      /*  else if (resultCode == Activity.RESULT_CANCELED) {
+            Logger.getLogger(AccelerationChartRun.class.getName()).log(
+                    Level.WARNING, "file not selected");
+        }*/
+
     }
 
     /**
@@ -439,5 +466,9 @@ public class MainActivity extends Activity
     protected void onDestroy() {
         super.onDestroy();
         mediaPlayer.stop();
+    }
+
+    public String getFolderPath(){
+        return folderPath;
     }
 }

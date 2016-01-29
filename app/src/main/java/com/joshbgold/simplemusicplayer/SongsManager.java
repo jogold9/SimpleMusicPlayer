@@ -1,5 +1,8 @@
 package com.joshbgold.simplemusicplayer;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -11,14 +14,17 @@ public class SongsManager {
     public HashMap<String, String> song;
     public String songTitle;
     private String uniqueSongIDString = "0";
+    public Context mContext;
 
     // SDCard Path
-    final String MEDIA_PATH = "/storage/extSdCard/music";
+    private String MEDIA_PATH = "/storage/extSdCard/music";
+    private String tempMediaPath = "";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();
 
 
-    public SongsManager() {
+    public SongsManager(Context context) {
+        mContext = context;
     }
 
     /**
@@ -26,6 +32,16 @@ public class SongsManager {
      * and store the details in ArrayList
      */
     public ArrayList<HashMap<String, String>> getPlayList() {
+
+        //If user has selected a media folder, retrieve that now
+        MainActivity mainActivity = new MainActivity();
+        tempMediaPath = mainActivity.getFolderPath();
+        if(tempMediaPath != ""){
+            MEDIA_PATH = tempMediaPath;
+            Toast.makeText(mContext, "tempMediaPath is set to " + tempMediaPath + "." + "MEDIA_PATH is set to " + MEDIA_PATH + ".", Toast
+                    .LENGTH_LONG).show();
+        }
+
         File home = new File(MEDIA_PATH);
 
         uniqueSongIDString = "0";

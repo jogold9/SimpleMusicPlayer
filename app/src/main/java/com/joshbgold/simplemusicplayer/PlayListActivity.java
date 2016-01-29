@@ -2,6 +2,7 @@ package com.joshbgold.simplemusicplayer;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -29,6 +30,7 @@ public class PlayListActivity extends ListActivity {
     public ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();  //stores songs that match search
     private int songsAddedCounter = 0;  //counter for debugging -> are songs being added to list?
     public boolean listIsFiltered = false;
+    private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +42,15 @@ public class PlayListActivity extends ListActivity {
             bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
         }
 
+        context = getApplicationContext();
+
         // Set up the layout elements for this activity
         editSearch = (EditText) findViewById(R.id.search);
         searchIcon = (ImageView) findViewById(R.id.search_icon);
 
         songsListData = new ArrayList<>();  //Stores all the songs to put into ListView
 
-        final SongsManager songsManager = new SongsManager();
+        final SongsManager songsManager = new SongsManager(context);
         // get all songs from SD card
         this.songsList = songsManager.getPlayList();  //gets all the songs from the phone and puts them in the HashMap
 
