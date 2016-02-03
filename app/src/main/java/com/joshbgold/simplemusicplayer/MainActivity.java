@@ -33,6 +33,7 @@ public class MainActivity extends Activity
 
     //variables for layout items
     private ImageButton btnPlay;
+    private ImageButton btnStop;
     private ImageButton btnForward;
     private ImageButton btnBackward;
     private ImageButton btnNext;
@@ -87,6 +88,7 @@ public class MainActivity extends Activity
 
         // All player buttons
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
+        btnStop = (ImageButton) findViewById(R.id.btnStop);
         btnForward = (ImageButton) findViewById(R.id.btnForward);
         btnBackward = (ImageButton) findViewById(R.id.btnBackward);
         btnNext = (ImageButton) findViewById(R.id.btnNext);
@@ -167,6 +169,31 @@ public class MainActivity extends Activity
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                 }
             }
+        });
+
+        /**
+         * Stops button click event
+         * Stops songs
+         * */
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if(mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+
+                    songTitleLabel.setText("");
+                    artistTextView.setText("");
+                    albumTextView.setText("");
+
+                   /* // set Progress bar values
+                    songProgressBar.setProgress(0);
+                    songProgressBar.setMax(100);
+
+                    // Updating progress bar
+                    updateProgressBar();*/
+                }
+           }
         });
 
         /**
@@ -428,7 +455,7 @@ public class MainActivity extends Activity
     }
 
     /**
-     * When user stops moving the progress hanlder
+     * When user stops moving the progress handler
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {

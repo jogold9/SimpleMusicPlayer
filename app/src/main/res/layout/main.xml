@@ -93,6 +93,13 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:src="@drawable/btn_play"/>
+            <!-- Stop Button -->
+            <ImageButton
+                android:id="@+id/btnStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_av_stop"/>
             <!-- Forward Button -->
             <ImageButton
                 android:id="@+id/btnForward"
