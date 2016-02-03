@@ -1,6 +1,8 @@
 package com.joshbgold.simplemusicplayer;
 
 import android.content.Context;
+import android.media.MediaMetadataRetriever;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -15,6 +17,10 @@ public class SongsManager {
     public String songTitle;
     private String uniqueSongIDString = "0";
     public Context mContext;
+    private ImageView album_art;
+    private MediaMetadataRetriever metaRetriver;  //can be used to get song title, artist, genre, album art from audio files
+    private byte[] art;
+    private String album, artist;
 
     // SDCard Path
     private String MEDIA_PATH = "/storage/extSdCard/music";
@@ -35,8 +41,11 @@ public class SongsManager {
 
         //If user has selected a media folder, retrieve that now
         MainActivity mainActivity = new MainActivity();
+
+        metaRetriver = new MediaMetadataRetriever();  //can be used to get song title, artist, genre, album art from audio files
+
         tempMediaPath = mainActivity.getFolderPath();
-        if(tempMediaPath != ""){
+        if (tempMediaPath != "") {
             MEDIA_PATH = tempMediaPath;
             Toast.makeText(mContext, "tempMediaPath is set to " + tempMediaPath + "." + "MEDIA_PATH is set to " + MEDIA_PATH + ".", Toast
                     .LENGTH_LONG).show();
@@ -47,7 +56,7 @@ public class SongsManager {
         uniqueSongIDString = "0";
         int uniqueSongIDInt = 0;
 
-        if (songsList != null){
+        if (songsList != null) {
             songsList.clear();
         }
 
@@ -55,7 +64,26 @@ public class SongsManager {
             for (File file : home.listFiles(new FileExtensionFilter())) {
                 song = new HashMap<>();
 
-                //songTitle = file.getName().substring(0, (file.getName().length() - 4));  //not necessary to omit the file type
+                metaRetriver.setDataSource(MEDIA_PATH + "/" + file.getName());  //set location so we can get artist, genre,album art, etc.
+
+                try {
+                    album = (metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+                    if (album.equals(null)){
+                        album = "Unknown Album";
+                    }
+                } catch (Exception exception) {
+                    album = ("Unknown Album");
+                }
+
+                try{
+                    artist = (metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+                    if (artist.equals(null)){
+                        artist = "Unknown Album";
+                    }
+                } catch (Exception exception) {
+                    artist = ("Unknown Artist");
+                }
+
                 songTitle = file.getName();
 
                 //remove track numbers from song titles
@@ -64,6 +92,8 @@ public class SongsManager {
 
                 song.put("songTitle", songTitle);
                 song.put("songPath", file.getPath());
+                song.put("album", album);
+                song.put("artist", artist);
                 song.put("songUniqueID", uniqueSongIDString);
                 uniqueSongIDInt++;
                 uniqueSongIDString = String.valueOf(uniqueSongIDInt);
@@ -95,7 +125,7 @@ public class SongsManager {
         //searchString is empty, so show all songs in results
         if (searchString.length() == 0) {
 
-            if (filteredSongsList != null){
+            if (filteredSongsList != null) {
                 filteredSongsList.clear();
             }
             filteredSongsList = songsList;
@@ -104,7 +134,7 @@ public class SongsManager {
         //only return songs that match the search string
         else {
 
-            if (filteredSongsList != null){
+            if (filteredSongsList != null) {
                 filteredSongsList.clear();
             }
 

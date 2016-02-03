@@ -63,14 +63,14 @@ public class PlayListActivity extends ListActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                String songTitle;
-                                                String songPath;
-                                                String songUniqueID;
+                                                String songTitle, songPath, artist, album, songUniqueID;
                                                 int songIndex;
 
                                                 HashMap<String, String> song = (HashMap<String, String>) parent.getItemAtPosition(position);
                                                 songTitle = song.get("songTitle");
                                                 songPath = song.get("songPath");
+                                                artist = song.get("artist");
+                                                album = song.get("album");
                                                 songUniqueID = song.get("songUniqueID");
 
                                                 songIndex = Integer.parseInt(songUniqueID);
@@ -78,16 +78,17 @@ public class PlayListActivity extends ListActivity {
                                                 // Starting new intent
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
-                                                // Sending song path and song title to MainActivity
+                                                // Sending all info about song to MainActivity
                                                 intent.putExtra("songIndex", songIndex);
                                                 intent.putExtra("songTitle", songTitle);
                                                 intent.putExtra("songPath", songPath);
+                                                intent.putExtra("artist", artist);
+                                                intent.putExtra("album", album);
 
                                                 setResult(100, intent);
 
                                                 // Closing PlayListView
                                                 finish();
-
                                             }
                                         }
 
@@ -129,7 +130,7 @@ public class PlayListActivity extends ListActivity {
 
         songsAddedCounter = 0;
         songsListData.clear();  //super important that we start from zero, and add only the filtered songs!
-        songsList.clear(); //TODO: Is this line needed??
+        songsList.clear(); //Is this line needed??
 
         // looping through playlist
         for (int i = 0; i < filteredSongsList.size(); i++) {

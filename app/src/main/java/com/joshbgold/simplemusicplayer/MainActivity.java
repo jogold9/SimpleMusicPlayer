@@ -42,9 +42,9 @@ public class MainActivity extends Activity
     private ImageButton btnShuffle;
     private ImageButton folder_icon;
     private SeekBar songProgressBar;
-    private TextView songTitleLabel;
-    private TextView songCurrentDurationLabel;
-    private TextView songTotalDurationLabel;
+    private TextView songTitleLabel, songCurrentDurationLabel,songTotalDurationLabel;
+    private TextView albumTextView;
+    private TextView artistTextView;
 
     // Media Player
     private MediaPlayer mediaPlayer;
@@ -59,6 +59,8 @@ public class MainActivity extends Activity
     private String songTitle = "";
     private String songPath = "";
     private String songUniqueID = "";
+    private String songArtist = "";
+    private String songAlbum = "";
     private boolean isShuffle = true;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
@@ -97,6 +99,8 @@ public class MainActivity extends Activity
         songTitleLabel = (TextView) findViewById(R.id.songTitle);
         songCurrentDurationLabel = (TextView) findViewById(R.id.songCurrentDurationLabel);
         songTotalDurationLabel = (TextView) findViewById(R.id.songTotalDurationLabel);
+        albumTextView = (TextView) findViewById(R.id.album_name);
+        artistTextView =(TextView) findViewById(R.id.artist);
 
         // Mediaplayer
         mediaPlayer = new MediaPlayer();
@@ -318,8 +322,13 @@ public class MainActivity extends Activity
             //songUniqueID = data.getExtras().getString("songUniqueID");
             songTitle = data.getExtras().getString("songTitle");
             songPath = data.getExtras().getString("songPath");
+            songArtist = data.getExtras().getString("artist");
+            songAlbum = data.getExtras().getString("album");
             // play selected song
             playSong(currentSongIndex, songTitle, songPath);
+
+            artistTextView.setText("Artist: " + songArtist);
+            albumTextView.setText("Album: " + songAlbum);
         }
 
         if (resultCode == Activity.RESULT_OK) {
@@ -352,8 +361,10 @@ public class MainActivity extends Activity
             mediaPlayer.prepare();
             mediaPlayer.start();
 
-            // Displaying Song title
+            // Displaying Song title, album & artist
             songTitleLabel.setText(songsList.get(songIndex).get("songTitle"));
+            albumTextView.setText("Album: " + songsList.get(songIndex).get("album"));
+            artistTextView.setText("Artist: " + songsList.get(songIndex).get("artist"));
 
             // Changing Button Image to pause image
             btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
@@ -445,12 +456,16 @@ public class MainActivity extends Activity
             // repeat is on play same song again
             playSong(currentSongIndex, songTitle, songPath);
         } else if (isShuffle) {
-            // shuffle is on - play a random song
+            // shuffle is on - clear album and artist, then play a random song
+            albumTextView.setText("");
+            artistTextView.setText("");
             Random rand = new Random();
             currentSongIndex = rand.nextInt((songsList.size() - 1) + 1);
             playSong(currentSongIndex, songTitle, songPath);
         } else {
-            // no repeat or shuffle ON - play next song
+            // no repeat or shuffle ON - clear album and artist, then play next song
+            albumTextView.setText("");
+            artistTextView.setText("");
             if (currentSongIndex < (songsList.size() - 1)) {
                 playSong(currentSongIndex + 1, songTitle, songPath);
                 currentSongIndex = currentSongIndex + 1;
