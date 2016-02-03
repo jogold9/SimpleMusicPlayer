@@ -9,7 +9,7 @@ public class Utilities {
      * */
     public String milliSecondsToTimer(long milliseconds){
         String finalTimerString = "";
-        String secondsString = "";
+        String secondsString;
 
         // Convert total duration into time
         int hours = (int)( milliseconds / (1000*60*60));
@@ -34,20 +34,25 @@ public class Utilities {
 
     /**
      * Function to get Progress percentage
-     * @param currentDuration
-     * @param totalDuration
+     * @param currentDuration elapsed time of song
+     * @param totalDuration length of song
      * */
     public int getProgressPercentage(long currentDuration, long totalDuration){
-        Double percentage = (double) 0;
+        Double percentage;
 
-        long currentSeconds = (int) (currentDuration / 1000);
-        long totalSeconds = (int) (totalDuration / 1000);
+        if (currentDuration == 0 && totalDuration == 0){
+            return 0;
+        }
+        else {
+            long currentSeconds = (int) (currentDuration / 1000);
+            long totalSeconds = (int) (totalDuration / 1000);
 
-        // calculating percentage
-        percentage =(((double)currentSeconds)/totalSeconds)*100;
+            // calculating percentage
+            percentage = (((double) currentSeconds) / totalSeconds) * 100;
 
-        // return percentage
-        return percentage.intValue();
+            // return percentage
+            return percentage.intValue();
+        }
     }
 
     /**
@@ -57,8 +62,8 @@ public class Utilities {
      * returns current duration in milliseconds
      * */
     public int progressToTimer(int progress, int totalDuration) {
-        int currentDuration = 0;
-        totalDuration = (int) (totalDuration / 1000);
+        int currentDuration;
+        totalDuration = totalDuration / 1000;
         currentDuration = (int) ((((double)progress) / 100) * totalDuration);
 
         // return current duration in milliseconds

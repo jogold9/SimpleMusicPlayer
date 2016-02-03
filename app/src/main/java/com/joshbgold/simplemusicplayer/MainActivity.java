@@ -3,7 +3,7 @@ package com.joshbgold.simplemusicplayer;
 /**
  * Based on code from Ravi Tamada http://www.androidhive.info/2012/03/android-building-audio-player-tutorial/
  * I added the search feature. Feature to select media source in progress.
- * */
+ */
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -14,6 +14,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -25,8 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class MainActivity extends Activity
-        implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
+public class MainActivity extends Activity implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
 
     private static final int REQUEST_SAVE = 101;
     private static final int REQUEST_LOAD = 102;
@@ -43,7 +45,9 @@ public class MainActivity extends Activity
     private ImageButton btnShuffle;
     private ImageButton folder_icon;
     private SeekBar songProgressBar;
-    private TextView songTitleLabel, songCurrentDurationLabel,songTotalDurationLabel;
+    private TextView songTitleLabel;
+    private TextView songCurrentDurationLabel;
+    private TextView songTotalDurationLabel;
 /*    private TextView albumTextView;
     private TextView artistTextView;*/
 
@@ -60,8 +64,8 @@ public class MainActivity extends Activity
     private String songTitle = "";
     private String songPath = "";
     private String songUniqueID = "";
-/*    private String songArtist = "";
-    private String songAlbum = "";*/
+    /*    private String songArtist = "";
+        private String songAlbum = "";*/
     private boolean isShuffle = true;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
@@ -139,8 +143,9 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-            //Select folder for music (https://code.google.com/archive/p/android-file-dialog/)
-                Intent intent = new Intent(getBaseContext(), FileDialog.class); intent.putExtra(FileDialog.START_PATH, "/");
+                //Select folder for music (https://code.google.com/archive/p/android-file-dialog/)
+                Intent intent = new Intent(getBaseContext(), FileDialog.class);
+                intent.putExtra(FileDialog.START_PATH, "/");
 
                 //can user select directories or not
                 intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
@@ -158,12 +163,11 @@ public class MainActivity extends Activity
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if(mediaPlayer.isPlaying()){
+                if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     song_position = mediaPlayer.getCurrentPosition();
                     btnPlay.setImageResource(R.drawable.ic_av_play_circle_fill);
-                }
-                else{
+                } else {
                     mediaPlayer.seekTo(song_position);
                     mediaPlayer.start();
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
@@ -179,21 +183,21 @@ public class MainActivity extends Activity
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if(mediaPlayer.isPlaying()) {
+                if (mediaPlayer.isPlaying()) {
                     mediaPlayer.stop();
-
-                    songTitleLabel.setText("");
-        /*            artistTextView.setText("");
-                    albumTextView.setText("");*/
-
-                   /* // set Progress bar values
-                    songProgressBar.setProgress(0);
-                    songProgressBar.setMax(100);
-
-                    // Updating progress bar
-                    updateProgressBar();*/
                 }
-           }
+
+                songTitleLabel.setText("");
+                //artistTextView.setText("");
+                //albumTextView.setText("");
+
+                // Clear total duration and current position labels
+                songTotalDurationLabel.setText("");
+                songCurrentDurationLabel.setText("");
+
+                songProgressBar.setProgress(0);
+                //updateProgressBar();
+            }
         });
 
         /**
@@ -510,7 +514,29 @@ public class MainActivity extends Activity
         mediaPlayer.stop();
     }
 
-    public String getFolderPath(){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                //launch settings activity
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public String getFolderPath() {
         return folderPath;
     }
 }
