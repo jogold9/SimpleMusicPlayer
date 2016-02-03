@@ -44,8 +44,8 @@ public class MainActivity extends Activity
     private ImageButton folder_icon;
     private SeekBar songProgressBar;
     private TextView songTitleLabel, songCurrentDurationLabel,songTotalDurationLabel;
-    private TextView albumTextView;
-    private TextView artistTextView;
+/*    private TextView albumTextView;
+    private TextView artistTextView;*/
 
     // Media Player
     private MediaPlayer mediaPlayer;
@@ -60,8 +60,8 @@ public class MainActivity extends Activity
     private String songTitle = "";
     private String songPath = "";
     private String songUniqueID = "";
-    private String songArtist = "";
-    private String songAlbum = "";
+/*    private String songArtist = "";
+    private String songAlbum = "";*/
     private boolean isShuffle = true;
     private boolean isRepeat = false;
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
@@ -101,8 +101,8 @@ public class MainActivity extends Activity
         songTitleLabel = (TextView) findViewById(R.id.songTitle);
         songCurrentDurationLabel = (TextView) findViewById(R.id.songCurrentDurationLabel);
         songTotalDurationLabel = (TextView) findViewById(R.id.songTotalDurationLabel);
-        albumTextView = (TextView) findViewById(R.id.album_name);
-        artistTextView =(TextView) findViewById(R.id.artist);
+  /*      albumTextView = (TextView) findViewById(R.id.album_name);
+        artistTextView =(TextView) findViewById(R.id.artist);*/
 
         // Mediaplayer
         mediaPlayer = new MediaPlayer();
@@ -139,7 +139,7 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(View arg0) {
-            //TODO: Select folder for music (https://code.google.com/archive/p/android-file-dialog/)
+            //Select folder for music (https://code.google.com/archive/p/android-file-dialog/)
                 Intent intent = new Intent(getBaseContext(), FileDialog.class); intent.putExtra(FileDialog.START_PATH, "/");
 
                 //can user select directories or not
@@ -183,8 +183,8 @@ public class MainActivity extends Activity
                     mediaPlayer.stop();
 
                     songTitleLabel.setText("");
-                    artistTextView.setText("");
-                    albumTextView.setText("");
+        /*            artistTextView.setText("");
+                    albumTextView.setText("");*/
 
                    /* // set Progress bar values
                     songProgressBar.setProgress(0);
@@ -349,13 +349,13 @@ public class MainActivity extends Activity
             //songUniqueID = data.getExtras().getString("songUniqueID");
             songTitle = data.getExtras().getString("songTitle");
             songPath = data.getExtras().getString("songPath");
-            songArtist = data.getExtras().getString("artist");
-            songAlbum = data.getExtras().getString("album");
+        /*    songArtist = data.getExtras().getString("artist");
+            songAlbum = data.getExtras().getString("album");*/
             // play selected song
             playSong(currentSongIndex, songTitle, songPath);
 
-            artistTextView.setText("Artist: " + songArtist);
-            albumTextView.setText("Album: " + songAlbum);
+   /*         artistTextView.setText("Artist: " + songArtist);
+            albumTextView.setText("Album: " + songAlbum);*/
         }
 
         if (resultCode == Activity.RESULT_OK) {
@@ -390,8 +390,8 @@ public class MainActivity extends Activity
 
             // Displaying Song title, album & artist
             songTitleLabel.setText(songsList.get(songIndex).get("songTitle"));
-            albumTextView.setText("Album: " + songsList.get(songIndex).get("album"));
-            artistTextView.setText("Artist: " + songsList.get(songIndex).get("artist"));
+/*            albumTextView.setText("Album: " + songsList.get(songIndex).get("album"));
+            artistTextView.setText("Artist: " + songsList.get(songIndex).get("artist"));*/
 
             // Changing Button Image to pause image
             btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
@@ -484,15 +484,15 @@ public class MainActivity extends Activity
             playSong(currentSongIndex, songTitle, songPath);
         } else if (isShuffle) {
             // shuffle is on - clear album and artist, then play a random song
-            albumTextView.setText("");
-            artistTextView.setText("");
+      /*      albumTextView.setText("");
+            artistTextView.setText("");*/
             Random rand = new Random();
             currentSongIndex = rand.nextInt((songsList.size() - 1) + 1);
             playSong(currentSongIndex, songTitle, songPath);
         } else {
             // no repeat or shuffle ON - clear album and artist, then play next song
-            albumTextView.setText("");
-            artistTextView.setText("");
+/*            albumTextView.setText("");
+            artistTextView.setText("");*/
             if (currentSongIndex < (songsList.size() - 1)) {
                 playSong(currentSongIndex + 1, songTitle, songPath);
                 currentSongIndex = currentSongIndex + 1;

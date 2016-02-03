@@ -69,8 +69,8 @@ public class PlayListActivity extends ListActivity {
                                                 HashMap<String, String> song = (HashMap<String, String>) parent.getItemAtPosition(position);
                                                 songTitle = song.get("songTitle");
                                                 songPath = song.get("songPath");
-                                                artist = song.get("artist");
-                                                album = song.get("album");
+                                            /*    artist = song.get("artist");
+                                                album = song.get("album");*/
                                                 songUniqueID = song.get("songUniqueID");
 
                                                 songIndex = Integer.parseInt(songUniqueID);
@@ -82,8 +82,8 @@ public class PlayListActivity extends ListActivity {
                                                 intent.putExtra("songIndex", songIndex);
                                                 intent.putExtra("songTitle", songTitle);
                                                 intent.putExtra("songPath", songPath);
-                                                intent.putExtra("artist", artist);
-                                                intent.putExtra("album", album);
+                                               /* intent.putExtra("artist", artist);
+                                                intent.putExtra("album", album);*/
 
                                                 setResult(100, intent);
 

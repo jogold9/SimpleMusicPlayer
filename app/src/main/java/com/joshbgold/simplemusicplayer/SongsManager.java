@@ -1,8 +1,6 @@
 package com.joshbgold.simplemusicplayer;
 
 import android.content.Context;
-import android.media.MediaMetadataRetriever;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -17,10 +15,10 @@ public class SongsManager {
     public String songTitle;
     private String uniqueSongIDString = "0";
     public Context mContext;
-    private ImageView album_art;
-    private MediaMetadataRetriever metaRetriver;  //can be used to get song title, artist, genre, album art from audio files
-    private byte[] art;
-    private String album, artist;
+    //private ImageView album_art;
+    //private MediaMetadataRetriever metaRetriver;  //can be used to get song title, artist, genre, album art from audio files
+    //private byte[] art;
+    //private String album, artist;
 
     // SDCard Path
     private String MEDIA_PATH = "/storage/extSdCard/music";
@@ -42,7 +40,7 @@ public class SongsManager {
         //If user has selected a media folder, retrieve that now
         MainActivity mainActivity = new MainActivity();
 
-        metaRetriver = new MediaMetadataRetriever();  //can be used to get song title, artist, genre, album art from audio files
+       //metaRetriver = new MediaMetadataRetriever();  //can be used to get song title, artist, genre, album art from audio files
 
         tempMediaPath = mainActivity.getFolderPath();
         if (tempMediaPath != "") {
@@ -64,9 +62,9 @@ public class SongsManager {
             for (File file : home.listFiles(new FileExtensionFilter())) {
                 song = new HashMap<>();
 
-                metaRetriver.setDataSource(MEDIA_PATH + "/" + file.getName());  //set location so we can get artist, genre,album art, etc.
+                //metaRetriver.setDataSource(MEDIA_PATH + "/" + file.getName());  //set location so we can get artist, genre,album art, etc.
 
-                try {
+            /*    try {
                     album = (metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
                     if (album.equals(null)){
                         album = "Unknown Album";
@@ -82,7 +80,7 @@ public class SongsManager {
                     }
                 } catch (Exception exception) {
                     artist = ("Unknown Artist");
-                }
+                }*/
 
                 songTitle = file.getName();
 
@@ -92,8 +90,8 @@ public class SongsManager {
 
                 song.put("songTitle", songTitle);
                 song.put("songPath", file.getPath());
-                song.put("album", album);
-                song.put("artist", artist);
+                //song.put("album", album);
+                //song.put("artist", artist);
                 song.put("songUniqueID", uniqueSongIDString);
                 uniqueSongIDInt++;
                 uniqueSongIDString = String.valueOf(uniqueSongIDInt);
