@@ -4,9 +4,11 @@ import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -31,16 +33,13 @@ public class PlayListActivity extends ListActivity {
     private int songsAddedCounter = 0;  //counter for debugging -> are songs being added to list?
     public boolean listIsFiltered = false;
     private Context context;
+    private String colorTheme = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playlist);
-
-        ActionBar bar = getActionBar();
-        if (bar != null) {
-            bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
-        }
 
         context = getApplicationContext();
 
@@ -108,6 +107,45 @@ public class PlayListActivity extends ListActivity {
         });
     }
 
+    private void setTheme() {
+
+        loadPrefs("color", colorTheme);
+        ActionBar bar = getActionBar();
+
+        switch (colorTheme) {
+            case "Royal":
+                setTheme(R.style.RoyalNoActionBar);
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+                }
+                break;
+            case "Forest":
+                setTheme(R.style.ForestNoActionBar);
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0D6529")));  //sets action bar to color primary dark
+                }
+                break;
+            case "Vermilion":
+                setTheme(R.style.VermilionNoActionBar);
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#A91616")));  //sets action bar to color primary dark
+                }
+                break;
+            case "Charcoal":
+                setTheme(R.style.CharcoalNoActionBar);
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#656666")));  //sets action bar to color primary dark
+                }
+                break;
+            default:
+                setTheme(R.style.RoyalNoActionBar);
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+                }
+                break;
+        }
+    }
+
     private void createListViewUsingSongs() {
         // looping through playlist
         for (int i = 0; i < songsList.size(); i++) {
@@ -151,6 +189,12 @@ public class PlayListActivity extends ListActivity {
 
         setListAdapter(simpleAdapter);
         simpleAdapter.notifyDataSetChanged();
+    }
+
+    //get prefs
+    public String loadPrefs(String key, String value) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPreferences.getString(key, value);
     }
 
 }

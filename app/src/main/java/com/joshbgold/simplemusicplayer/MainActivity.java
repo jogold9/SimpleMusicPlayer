@@ -9,11 +9,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +37,6 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
     //variables for layout items
     private ImageButton btnPlay;
-    private ImageButton btnStop;
     private ImageButton btnForward;
     private ImageButton btnBackward;
     private ImageButton btnNext;
@@ -92,7 +93,6 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
         // All player buttons
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
-        btnStop = (ImageButton) findViewById(R.id.btnStop);
         btnForward = (ImageButton) findViewById(R.id.btnForward);
         btnBackward = (ImageButton) findViewById(R.id.btnBackward);
         btnNext = (ImageButton) findViewById(R.id.btnNext);
@@ -172,31 +172,6 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                     mediaPlayer.start();
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                 }
-            }
-        });
-
-        /**
-         * Stops button click event
-         * Stops songs
-         * */
-
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.stop();
-                }
-
-                songTitleLabel.setText("");
-                //artistTextView.setText("");
-                //albumTextView.setText("");
-
-                // Clear total duration and current position labels
-                songTotalDurationLabel.setText("");
-                songCurrentDurationLabel.setText("");
-
-                songProgressBar.setProgress(0);
-                //updateProgressBar();
             }
         });
 
@@ -538,5 +513,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
     public String getFolderPath() {
         return folderPath;
+    }
+
+    //get prefs
+    public String loadPrefs(String key, String value){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return sharedPreferences.getString(key, value);
     }
 }
