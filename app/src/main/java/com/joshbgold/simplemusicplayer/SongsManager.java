@@ -38,7 +38,7 @@ public class SongsManager {
      * and store the details in ArrayList
      */
     public ArrayList<HashMap<String, String>> getPlayList() {
-        
+
         File home = new File(MEDIA_PATH);
 
         uniqueSongIDString = "0";
