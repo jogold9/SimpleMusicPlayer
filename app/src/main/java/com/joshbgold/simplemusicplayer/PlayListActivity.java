@@ -34,6 +34,8 @@ public class PlayListActivity extends ListActivity {
     public boolean listIsFiltered = false;
     private Context context;
     private String colorTheme = "";
+    private SongsManager songsManager;
+    public String musicFolderPath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,9 @@ public class PlayListActivity extends ListActivity {
 
         songsListData = new ArrayList<>();  //Stores all the songs to put into ListView
 
-        final SongsManager songsManager = new SongsManager(context);
+        musicFolderPath =  loadPrefs("folder", musicFolderPath);  //if user has chosen a media folder, get their choice
+
+        songsManager = new SongsManager(context, musicFolderPath);
         // get all songs from SD card
         this.songsList = songsManager.getPlayList();  //gets all the songs from the phone and puts them in the HashMap
 

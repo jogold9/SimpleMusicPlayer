@@ -73,6 +73,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private Context context;
     private int song_position;
     public String folderPath = "";
+    public String musicFolderPath = "";
 
     public MainActivity(Context context) {
         this.context = context;
@@ -108,9 +109,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
   /*      albumTextView = (TextView) findViewById(R.id.album_name);
         artistTextView =(TextView) findViewById(R.id.artist);*/
 
+        musicFolderPath =  loadPrefs("folder", musicFolderPath);  //if user has chosen a media folder, get their choice
+
         // Mediaplayer
         mediaPlayer = new MediaPlayer();
-        songManager = new SongsManager(context);
+        songManager = new SongsManager(context, musicFolderPath);
         utils = new Utilities();
 
         // Listeners
@@ -149,7 +152,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
                 //can user select directories or not
                 intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
-                intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);  //Prevents new items creation.  Users can only select existing.
+                intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);  //Prevents new items folder & file creation.
 
                 startActivityForResult(intent, REQUEST_SAVE);
             }
