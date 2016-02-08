@@ -61,7 +61,7 @@ public class FileDialog extends ListActivity {
     private boolean canSelectDir = false;
 
     private File selectedFile;
-    private HashMap<String, Integer> lastPositions = new HashMap<String, Integer>();
+    private HashMap<String, Integer> lastPositions = new HashMap<>();
 
     /**
      * Sets all inputs and views
@@ -90,17 +90,20 @@ public class FileDialog extends ListActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO: Check whether item selected is a file or a folder.  Disallow user form choosing a file.
+                //Check whether item selected is a file or a folder.  Disallow user form choosing a file.
                 if (selectedFile.exists() && selectedFile != null & selectedFile.isDirectory()) {
                     musicFolderPath = selectedFile.getPath();
                     getIntent().putExtra(RESULT_PATH, musicFolderPath);
                     setResult(RESULT_OK, getIntent());
                     savePrefs("folder", musicFolderPath);
-                    Toast.makeText(getApplicationContext(), "You select " + selectedFile.getPath(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "You selected " + selectedFile.getPath(), Toast.LENGTH_LONG).show();
                     finish();
                 }
                 else {
-                    //TODO: Let user know they need to select a folder where their music lives.  Do not select a file.
+                    //Let user know they need to select a folder where their music lives.  Do not select a file.
+                    Toast.makeText(getApplicationContext(), "It looks like you have selected a file.  Please select the folder where your music " +
+                            "lives.", Toast
+                            .LENGTH_LONG).show();
                 }
             }
         });
@@ -112,9 +115,9 @@ public class FileDialog extends ListActivity {
 
         canSelectDir = getIntent().getBooleanExtra(CAN_SELECT_DIR, false);
 
-        if (selectionMode == SelectionMode.MODE_OPEN) {
+      /*  if (selectionMode == SelectionMode.MODE_OPEN) {
             //newButton.setEnabled(false);
-        }
+        }*/
 
         layoutSelect = (LinearLayout) findViewById(R.id.fdLinearLayoutSelect);
         layoutCreate = (LinearLayout) findViewById(R.id.fdLinearLayoutCreate);
@@ -134,8 +137,7 @@ public class FileDialog extends ListActivity {
         String startPath = getIntent().getStringExtra(START_PATH);
         startPath = startPath != null ? startPath : ROOT;
         if (canSelectDir) {
-            File file = new File(startPath);
-            selectedFile = file;
+            selectedFile = new File(startPath);
             selectButton.setEnabled(true);
         }
         getDir(startPath);
@@ -162,9 +164,9 @@ public class FileDialog extends ListActivity {
 
         currentPath = dirPath;
 
-        final List<String> item = new ArrayList<String>();
-        path = new ArrayList<String>();
-        mList = new ArrayList<HashMap<String, Object>>();
+        final List<String> item = new ArrayList<>();
+        path = new ArrayList<>();
+        mList = new ArrayList<>();
 
         File myFile = new File(currentPath);
         File[] files = myFile.listFiles();
@@ -188,10 +190,10 @@ public class FileDialog extends ListActivity {
 
         }
 
-        TreeMap<String, String> dirsMap = new TreeMap<String, String>();
-        TreeMap<String, String> dirsPathMap = new TreeMap<String, String>();
-        TreeMap<String, String> filesMap = new TreeMap<String, String>();
-        TreeMap<String, String> filesPathMap = new TreeMap<String, String>();
+        TreeMap<String, String> dirsMap = new TreeMap<>();
+        TreeMap<String, String> dirsPathMap = new TreeMap<>();
+        TreeMap<String, String> filesMap = new TreeMap<>();
+        TreeMap<String, String> filesPathMap = new TreeMap<>();
         for (File file : files) {
             if (file.isDirectory()) {
                 String dirName = file.getName();
@@ -243,7 +245,7 @@ public class FileDialog extends ListActivity {
     }
 
     private void addItem(String fileName, int imageId) {
-        HashMap<String, Object> item = new HashMap<String, Object>();
+        HashMap<String, Object> item = new HashMap<>();
         item.put(ITEM_KEY, fileName);
         item.put(ITEM_IMAGE, imageId);
         mList.add(item);
