@@ -74,6 +74,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private int song_position;
     public String folderPath = "";
     public String musicFolderPath = "";
+    private boolean isPaused = false;
 
     public MainActivity(Context context) {
         this.context = context;
@@ -88,9 +89,10 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         setContentView(R.layout.main);
 
         ActionBar bar = getActionBar();
-        if (bar != null) {
-            bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
-        }
+
+            if (bar != null) {
+                bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+            }
 
         // All player buttons
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
@@ -166,13 +168,30 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (mediaPlayer.isPlaying()) {
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     song_position = mediaPlayer.getCurrentPosition();
                     btnPlay.setImageResource(R.drawable.ic_av_play_circle_fill);
-                } else {
+                    isPaused = true;
+                }
+                
+                else if (isPaused){
                     mediaPlayer.seekTo(song_position);
                     mediaPlayer.start();
+                    isPaused = false;
+
+                    btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
+                }
+                
+                else {
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mediaPlayer.seekTo(song_position);
+                            mediaPlayer.start();
+                        }
+                    });
+
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                 }
             }
@@ -334,7 +353,9 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         /*    songArtist = data.getExtras().getString("artist");
             songAlbum = data.getExtras().getString("album");*/
             // play selected song
-            playSong(currentSongIndex, songTitle, songPath);
+            if (songTitle != "" && songTitle != null && songPath != "" & songPath != null) {
+                playSong(currentSongIndex, songTitle, songPath);
+            }
 
    /*         artistTextView.setText("Artist: " + songArtist);
             albumTextView.setText("Album: " + songAlbum);*/
@@ -365,25 +386,27 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         // Play song
         try {
             mediaPlayer.reset();
-            //mediaPlayer.setDataSource(songPath);
-            mediaPlayer.setDataSource(songsList.get(songIndex).get("songPath"));
-            mediaPlayer.prepare();
-            mediaPlayer.start();
 
-            // Displaying Song title, album & artist
-            songTitleLabel.setText(songsList.get(songIndex).get("songTitle"));
+            if (songsList.size() - 1 >= songIndex) {
+                mediaPlayer.setDataSource(songsList.get(songIndex).get("songPath"));
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+
+                // Displaying Song title, album & artist
+                songTitleLabel.setText(songsList.get(songIndex).get("songTitle"));
 /*            albumTextView.setText("Album: " + songsList.get(songIndex).get("album"));
             artistTextView.setText("Artist: " + songsList.get(songIndex).get("artist"));*/
 
-            // Changing Button Image to pause image
-            btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
+                // Changing Button Image to pause image
+                btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
 
-            // set Progress bar values
-            songProgressBar.setProgress(0);
-            songProgressBar.setMax(100);
+                // set Progress bar values
+                songProgressBar.setProgress(0);
+                songProgressBar.setMax(100);
 
-            // Updating progress bar
-            updateProgressBar();
+                // Updating progress bar
+                updateProgressBar();
+            }
         } catch (IllegalArgumentException | IllegalStateException | IOException e) {
             e.printStackTrace();
         }
@@ -461,27 +484,32 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     public void onCompletion(MediaPlayer arg0) {
 
         // check for repeat is ON or OFF
-        if (isRepeat) {
-            // repeat is on play same song again
-            playSong(currentSongIndex, songTitle, songPath);
-        } else if (isShuffle) {
-            // shuffle is on - clear album and artist, then play a random song
+        if (songsList.size() == 0) {
+            //do nothing, because there are no songs in the songList
+        }
+            else{
+            if (isRepeat) {
+                // repeat is on play same song again
+                playSong(currentSongIndex, songTitle, songPath);
+            } else if (isShuffle) {
+                // shuffle is on - clear album and artist, then play a random song
       /*      albumTextView.setText("");
             artistTextView.setText("");*/
-            Random rand = new Random();
-            currentSongIndex = rand.nextInt((songsList.size() - 1) + 1);
-            playSong(currentSongIndex, songTitle, songPath);
-        } else {
-            // no repeat or shuffle ON - clear album and artist, then play next song
+                Random rand = new Random();
+                currentSongIndex = rand.nextInt((songsList.size() - 1) + 1);
+                playSong(currentSongIndex, songTitle, songPath);
+            } else {
+                // no repeat or shuffle ON - clear album and artist, then play next song
 /*            albumTextView.setText("");
             artistTextView.setText("");*/
-            if (currentSongIndex < (songsList.size() - 1)) {
-                playSong(currentSongIndex + 1, songTitle, songPath);
-                currentSongIndex = currentSongIndex + 1;
-            } else {
-                // play first song
-                playSong(0, songTitle, songPath);
-                currentSongIndex = 0;
+                if (currentSongIndex < (songsList.size() - 1)) {
+                    playSong(currentSongIndex + 1, songTitle, songPath);
+                    currentSongIndex = currentSongIndex + 1;
+                } else {
+                    // play first song
+                    playSong(0, songTitle, songPath);
+                    currentSongIndex = 0;
+                }
             }
         }
     }

@@ -32,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:background="@null"
+            android:layout_marginRight="10dp"
             android:src="@drawable/ic_action_menu"/>
 
         <ImageButton
@@ -78,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_av_skip_previous"/>
             <!-- Backward Button -->
             <ImageButton
@@ -85,6 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_av_fast_rewind"/>
             <!-- Play Button -->
             <ImageButton
@@ -92,6 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/btn_play"/>
             <!-- Stop Button -->
             <!-- Forward Button -->
@@ -100,6 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_av_fast_forward"/>
             <!-- Next Button -->
             <ImageButton
