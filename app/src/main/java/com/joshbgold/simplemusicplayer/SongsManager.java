@@ -20,7 +20,7 @@ public class SongsManager {
     //private String album, artist;
 
     // SDCard Path
-    public String MEDIA_PATH = "/storage/extSdCard/music";
+    public String MEDIA_PATH = "/storage";
     private String tempMediaPath = "";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();
@@ -28,7 +28,7 @@ public class SongsManager {
 
     public SongsManager(Context context, String folderPath) {
         mContext = context;
-        if (folderPath != null && folderPath != "") {
+        if (folderPath != null && !"".equals(folderPath)) {
             MEDIA_PATH = folderPath;
         }
     }

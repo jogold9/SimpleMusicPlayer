@@ -74,7 +74,6 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private int song_position;
     public String folderPath = "";
     public String musicFolderPath = "";
-    private boolean isPaused = false;
 
     public MainActivity(Context context) {
         this.context = context;
@@ -172,15 +171,6 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                     mediaPlayer.pause();
                     song_position = mediaPlayer.getCurrentPosition();
                     btnPlay.setImageResource(R.drawable.ic_av_play_circle_fill);
-                    isPaused = true;
-                }
-                
-                else if (isPaused){
-                    mediaPlayer.seekTo(song_position);
-                    mediaPlayer.start();
-                    isPaused = false;
-
-                    btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                 }
                 
                 else {
@@ -353,7 +343,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         /*    songArtist = data.getExtras().getString("artist");
             songAlbum = data.getExtras().getString("album");*/
             // play selected song
-            if (songTitle != "" && songTitle != null && songPath != "" && songPath != null) {
+            if (!"".equals(songTitle) && songTitle != null && !"".equals(songPath) && songPath != null) {
                 playSong(currentSongIndex, songTitle, songPath);
             }
 
