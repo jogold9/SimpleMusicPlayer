@@ -178,8 +178,8 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                     mediaPlayer.start();
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                 } else {
-                    Toast.makeText(getApplicationContext(), "No songs found.  Please click folder icon at top right, and select your music folder. " +
-                            "Then go to playlist icon at top right,  and click a song to start.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Oh noes! No songs found.  Please click folder icon at top right and select your music" +
+                            " folder. ", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -324,6 +324,14 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
             }
         });
     }
+
+ /*   @Override
+    protected void onResume() {
+        super.onResume();
+        musicFolderPath = loadPrefs("folder", musicFolderPath);  //if user has chosen a media folder, get their choice
+        // Getting all songs playlist_item
+        songsList = songManager.getPlayList();
+    }*/
 
     /**
      * Receiving song index from playlist view

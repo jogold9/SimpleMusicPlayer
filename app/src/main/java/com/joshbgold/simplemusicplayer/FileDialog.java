@@ -3,6 +3,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -99,7 +100,9 @@ public class FileDialog extends ListActivity {
                     setResult(RESULT_OK, getIntent());
                     savePrefs("folder", musicFolderPath);
                     Toast.makeText(getApplicationContext(), "You selected " + selectedFile.getPath(), Toast.LENGTH_LONG).show();
-                    finish();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    //finish();
                 }
                 else {
                     //Let user know they need to select a folder where their music lives.  Do not select a file.
