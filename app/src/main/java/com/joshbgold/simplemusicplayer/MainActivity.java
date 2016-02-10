@@ -74,6 +74,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private int song_position;
     public String folderPath = "";
     public String musicFolderPath = "";
+    //private boolean isPaused;
 
     public MainActivity(Context context) {
         this.context = context;
@@ -171,19 +172,33 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                     mediaPlayer.pause();
                     song_position = mediaPlayer.getCurrentPosition();
                     btnPlay.setImageResource(R.drawable.ic_av_play_circle_fill);
+                    //isPaused = true;
                 }
-                
+                //play song if songs list is not empty
+                else if (songsList != null && songsList.size() > 0){
+                    mediaPlayer.seekTo(song_position);
+                    mediaPlayer.start();
+                    btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
+                    //isPaused = false;
+                }
                 else {
+                    Toast.makeText(getApplicationContext(), "No songs found.  Please click folder icon at top right, and select your music folder. " +
+                            "Then go to " +
+                            "playlist icon at top right,  and click a song to start.", Toast
+                            .LENGTH_LONG).show();
+                }
+
+              /*  else {
                     mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
-                        public void onPrepared(MediaPlayer mp) {
+                        public void onPrepared(MediaPlayer mediaplayer) {
                             mediaPlayer.seekTo(song_position);
                             mediaPlayer.start();
                         }
                     });
 
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
-                }
+                }*/
             }
         });
 
