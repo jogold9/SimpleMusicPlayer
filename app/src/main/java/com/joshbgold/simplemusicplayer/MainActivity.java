@@ -90,9 +90,9 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
         ActionBar bar = getActionBar();
 
-            if (bar != null) {
-                bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
-            }
+        if (bar != null) {
+            bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+        }
 
         // All player buttons
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
   /*      albumTextView = (TextView) findViewById(R.id.album_name);
         artistTextView =(TextView) findViewById(R.id.artist);*/
 
-        musicFolderPath =  loadPrefs("folder", musicFolderPath);  //if user has chosen a media folder, get their choice
+        musicFolderPath = loadPrefs("folder", musicFolderPath);  //if user has chosen a media folder, get their choice
 
         // Mediaplayer
         mediaPlayer = new MediaPlayer();
@@ -175,17 +175,14 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                     //isPaused = true;
                 }
                 //play song if songs list is not empty
-                else if (songsList != null && songsList.size() > 0){
+                else if (songsList != null && songsList.size() > 0) {
                     mediaPlayer.seekTo(song_position);
                     mediaPlayer.start();
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                     //isPaused = false;
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "No songs found.  Please click folder icon at top right, and select your music folder. " +
-                            "Then go to " +
-                            "playlist icon at top right,  and click a song to start.", Toast
-                            .LENGTH_LONG).show();
+                            "Then go to playlist icon at top right,  and click a song to start.", Toast.LENGTH_LONG).show();
                 }
 
               /*  else {
@@ -491,8 +488,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         // check for repeat is ON or OFF
         if (songsList.size() == 0) {
             //do nothing, because there are no songs in the songList
-        }
-            else{
+        } else {
             if (isRepeat) {
                 // repeat is on play same song again
                 playSong(currentSongIndex, songTitle, songPath);
@@ -543,7 +539,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                 startActivity(intent);
                 return true;
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -552,7 +548,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     }
 
     //get prefs
-    public String loadPrefs(String key, String value){
+    public String loadPrefs(String key, String value) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return sharedPreferences.getString(key, value);
     }
