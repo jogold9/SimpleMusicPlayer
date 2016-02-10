@@ -48,26 +48,28 @@ public class SongsManager {
             songsList.clear();
         }
 
-        if (home.listFiles(new FileExtensionFilter()).length > 0) {
-            for (File file : home.listFiles(new FileExtensionFilter())) {
-                song = new HashMap<>();
+        if (home.listFiles() != null) {
+            if ((home.listFiles(new FileExtensionFilter()).length > 0)) {
+                for (File file : home.listFiles(new FileExtensionFilter())) {
+                    song = new HashMap<>();
 
-                songTitle = file.getName();
+                    songTitle = file.getName();
 
-                //remove track numbers from song titles
-                songTitle = songTitle.replaceFirst("^\\d*\\s", "");  //replaces leading digits & following space
-                songTitle = songTitle.replaceFirst("^\\d*\\-\\d*", "");  //replaces leading digits, following hyphen, and following digits
+                    //remove track numbers from song titles
+                    songTitle = songTitle.replaceFirst("^\\d*\\s", "");  //replaces leading digits & following space
+                    songTitle = songTitle.replaceFirst("^\\d*\\-\\d*", "");  //replaces leading digits, following hyphen, and following digits
 
-                song.put("songTitle", songTitle);
-                song.put("songPath", file.getPath());
-                //song.put("album", album);
-                //song.put("artist", artist);
-                song.put("songUniqueID", uniqueSongIDString);
-                uniqueSongIDInt++;
-                uniqueSongIDString = String.valueOf(uniqueSongIDInt);
+                    song.put("songTitle", songTitle);
+                    song.put("songPath", file.getPath());
+                    //song.put("album", album);
+                    //song.put("artist", artist);
+                    song.put("songUniqueID", uniqueSongIDString);
+                    uniqueSongIDInt++;
+                    uniqueSongIDString = String.valueOf(uniqueSongIDInt);
 
-                // Adding each song to SongList
-                songsList.add(song);
+                    // Adding each song to SongList
+                    songsList.add(song);
+                }
             }
         }
         // return songs playlist_item array

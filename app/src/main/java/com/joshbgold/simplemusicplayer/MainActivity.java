@@ -353,7 +353,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         /*    songArtist = data.getExtras().getString("artist");
             songAlbum = data.getExtras().getString("album");*/
             // play selected song
-            if (songTitle != "" && songTitle != null && songPath != "" & songPath != null) {
+            if (songTitle != "" && songTitle != null && songPath != "" && songPath != null) {
                 playSong(currentSongIndex, songTitle, songPath);
             }
 
