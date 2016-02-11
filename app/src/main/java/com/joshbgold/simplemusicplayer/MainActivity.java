@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -522,7 +521,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
+    /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -534,11 +533,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
-    public String getFolderPath() {
+   /* public String getFolderPath() {
         return folderPath;
-    }
+    }*/
 
     //get prefs
     public String loadPrefs(String key, String value) {
