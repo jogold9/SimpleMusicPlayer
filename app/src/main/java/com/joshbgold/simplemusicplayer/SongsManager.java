@@ -61,8 +61,6 @@ public class SongsManager {
 
                     song.put("songTitle", songTitle);
                     song.put("songPath", file.getPath());
-                    //song.put("album", album);
-                    //song.put("artist", artist);
                     song.put("songUniqueID", uniqueSongIDString);
                     uniqueSongIDInt++;
                     uniqueSongIDString = String.valueOf(uniqueSongIDInt);

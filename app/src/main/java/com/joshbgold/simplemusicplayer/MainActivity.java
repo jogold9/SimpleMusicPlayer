@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,8 +49,9 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private TextView songTitleLabel;
     private TextView songCurrentDurationLabel;
     private TextView songTotalDurationLabel;
-/*    private TextView albumTextView;
-    private TextView artistTextView;*/
+    private TextView albumTextView;
+    private TextView artistTextView;
+    private MediaMetadataRetriever metaRetriver;
 
     // Media Player
     private MediaPlayer mediaPlayer;
@@ -106,8 +108,8 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         songTitleLabel = (TextView) findViewById(R.id.songTitle);
         songCurrentDurationLabel = (TextView) findViewById(R.id.songCurrentDurationLabel);
         songTotalDurationLabel = (TextView) findViewById(R.id.songTotalDurationLabel);
-  /*      albumTextView = (TextView) findViewById(R.id.album_name);
-        artistTextView =(TextView) findViewById(R.id.artist);*/
+        albumTextView = (TextView) findViewById(R.id.album);
+        artistTextView = (TextView) findViewById(R.id.artist);
 
         musicFolderPath = loadPrefs("folder", musicFolderPath);  //if user has chosen a media folder, get their choice
 
@@ -377,19 +379,20 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
      * Function to play a song
      */
     public void playSong(int songIndex, String songTitle, String songPath) {
+        String path = "";
+
         // Play song
         try {
             mediaPlayer.reset();
 
             if (songsList.size() - 1 >= songIndex) {
-                mediaPlayer.setDataSource(songsList.get(songIndex).get("songPath"));
+                path = songsList.get(songIndex).get("songPath");
+                mediaPlayer.setDataSource(path);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
 
-                // Displaying Song title, album & artist
+                // Displaying Song title
                 songTitleLabel.setText(songsList.get(songIndex).get("songTitle"));
-/*            albumTextView.setText("Album: " + songsList.get(songIndex).get("album"));
-            artistTextView.setText("Artist: " + songsList.get(songIndex).get("artist"));*/
 
                 // Changing Button Image to pause image
                 btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
@@ -400,9 +403,25 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
                 // Updating progress bar
                 updateProgressBar();
+
+                //get & display artist & album
+                getAdditionalMediaInfo(path);
             }
         } catch (IllegalArgumentException | IllegalStateException | IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void getAdditionalMediaInfo(String path) {
+        metaRetriver = new MediaMetadataRetriever();
+        metaRetriver.setDataSource(path);  //path holds location of the current song
+        try {
+            albumTextView.setText(metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+            artistTextView.setText(metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        } catch (Exception e) {
+            //leave these textViews blank if unable to retrieve the album or artist
+            albumTextView.setText("");
+            artistTextView.setText("");
         }
     }
 

@@ -72,8 +72,6 @@ public class PlayListActivity extends ListActivity {
                                                 HashMap<String, String> song = (HashMap<String, String>) parent.getItemAtPosition(position);
                                                 songTitle = song.get("songTitle");
                                                 songPath = song.get("songPath");
-                                            /*    artist = song.get("artist");
-                                                album = song.get("album");*/
                                                 songUniqueID = song.get("songUniqueID");
 
                                                 songIndex = Integer.parseInt(songUniqueID);

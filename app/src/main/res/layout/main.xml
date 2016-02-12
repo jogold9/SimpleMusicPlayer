@@ -31,8 +31,8 @@
             android:id="@+id/btnPlaylist"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:background="@null"
             android:layout_marginRight="10dp"
+            android:background="@null"
             android:src="@drawable/ic_action_menu"/>
 
         <ImageButton
@@ -78,24 +78,24 @@
                 android:id="@+id/btnPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
                 android:layout_marginRight="10dp"
+                android:background="@null"
                 android:src="@drawable/ic_av_skip_previous"/>
             <!-- Backward Button -->
             <ImageButton
                 android:id="@+id/btnBackward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
                 android:layout_marginRight="10dp"
+                android:background="@null"
                 android:src="@drawable/ic_av_fast_rewind"/>
             <!-- Play Button -->
             <ImageButton
                 android:id="@+id/btnPlay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
                 android:layout_marginRight="10dp"
+                android:background="@null"
                 android:src="@drawable/btn_play"/>
             <!-- Stop Button -->
             <!-- Forward Button -->
@@ -103,8 +103,8 @@
                 android:id="@+id/btnForward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
                 android:layout_marginRight="10dp"
+                android:background="@null"
                 android:src="@drawable/ic_av_fast_forward"/>
             <!-- Next Button -->
             <ImageButton
@@ -184,34 +184,26 @@
             android:src="@drawable/ic_av_shuffle"/>
     </LinearLayout>
 
-<!--    <TextView
+    <TextView
+        android:id="@+id/artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/album"
+        android:layout_marginBottom="10dp"
         android:text=""
-        android:textColor="@color/iconColor"
-        android:id="@+id/album_name"
-        android:layout_above="@+id/artist"
-        android:layout_centerHorizontal="true"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/iconColor"/>
 
     <TextView
+        android:id="@+id/album"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text=""
-        android:textColor="@color/iconColor"
-        android:id="@+id/artist"
-        android:layout_above="@+id/album_art"
-        android:layout_centerHorizontal="true"/>
-
-    <ImageView
-        android:id="@+id/album_art"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/icon"
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"/>-->
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:paddingBottom="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/iconColor"/>
 
 </RelativeLayout>
