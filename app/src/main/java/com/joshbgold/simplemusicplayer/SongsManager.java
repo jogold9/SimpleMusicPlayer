@@ -14,14 +14,10 @@ public class SongsManager {
     public String songTitle;
     private String uniqueSongIDString = "0";
     public Context mContext;
-    //private ImageView album_art;
-    //private MediaMetadataRetriever metaRetriver;  //can be used to get song title, artist, genre, album art from audio files
-    //private byte[] art;
-    //private String album, artist;
+    protected String lowerCaseName = "";
 
     // SDCard Path
     public String MEDIA_PATH = "/storage";
-    private String tempMediaPath = "";
     private ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
     private ArrayList<HashMap<String, String>> filteredSongsList = new ArrayList<>();
 
@@ -79,8 +75,8 @@ public class SongsManager {
      */
     class FileExtensionFilter implements FilenameFilter {
         public boolean accept(File dir, String name) {
-            return (name.endsWith(".mp3") || name.endsWith(".MP3") || name.endsWith(".wma") || name.endsWith(".WMA") || name.endsWith(".wav") ||
-                    name.endsWith(".WAV") || name.endsWith(".m4a") || name.endsWith(".M4A"));
+            lowerCaseName = name.toLowerCase();
+            return (name.endsWith(".mp3")  || name.endsWith(".wma") || name.endsWith(".wav") || name.endsWith(".m4a") || name.endsWith(".flac"));
         }
     }
 

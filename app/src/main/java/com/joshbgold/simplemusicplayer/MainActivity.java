@@ -379,7 +379,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
      * Function to play a song
      */
     public void playSong(int songIndex, String songTitle, String songPath) {
-        String path = "";
+        String path;
 
         // Play song
         try {
@@ -417,10 +417,15 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         metaRetriver.setDataSource(path);  //path holds location of the current song
         try {
             albumTextView.setText(metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
-            artistTextView.setText(metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
-        } catch (Exception e) {
+        } catch (Exception exception) {
             //leave these textViews blank if unable to retrieve the album or artist
             albumTextView.setText("");
+        }
+
+        try {
+            artistTextView.setText(metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        } catch (Exception exception) {
+            //leave these textViews blank if unable to retrieve the album or artist
             artistTextView.setText("");
         }
     }
