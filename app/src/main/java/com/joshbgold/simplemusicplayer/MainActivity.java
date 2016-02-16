@@ -502,6 +502,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     public void onCompletion(MediaPlayer arg0) {
 
         // check for repeat is ON or OFF
+        //noinspection StatementWithEmptyBody
         if (songsList.size() == 0) {
             //do nothing, because there are no songs in the songList
         } else {
