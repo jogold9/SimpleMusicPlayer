@@ -45,9 +45,28 @@ public class SongsManager {
         }
 
         if (home.listFiles() != null) {
+            //search audio files in root media directory user has selected
+            searchForAudioFiles(home, uniqueSongIDInt);
+
+            //search subfolders of root media directory for audio files
+            File[] someFiles = home.listFiles();
+            for (int i = 0; i < someFiles.length; i++) {
+                File selectedFile = someFiles[i];
+                if (selectedFile.isDirectory()) {
+                    if (selectedFile.listFiles() != null) {
+                        searchForAudioFiles(selectedFile, uniqueSongIDInt);
+                    }
+                }
+            }
+        }
+        // return songs playlist_item array
+        return songsList;
+    }
+
+    private void searchForAudioFiles(File home, int uniqueSongIDInt) {
             if ((home.listFiles(new FileExtensionFilter()).length > 0)) {
-                for (File file : home.listFiles(new FileExtensionFilter())) {
-                    song = new HashMap<>();
+                for (File file : home.listFiles(new FileExtensionFilter())) {  //for each file that is an audio file in home directory
+                    song = new HashMap<>();  //make a hashmap data structure to store song info
 
                     songTitle = file.getName();
 
@@ -65,9 +84,6 @@ public class SongsManager {
                     songsList.add(song);
                 }
             }
-        }
-        // return songs playlist_item array
-        return songsList;
     }
 
     /**
@@ -76,7 +92,7 @@ public class SongsManager {
     class FileExtensionFilter implements FilenameFilter {
         public boolean accept(File dir, String name) {
             lowerCaseName = name.toLowerCase();
-            return (name.endsWith(".mp3")  || name.endsWith(".wma") || name.endsWith(".wav") || name.endsWith(".m4a") || name.endsWith(".flac"));
+            return (name.endsWith(".mp3") || name.endsWith(".wma") || name.endsWith(".wav") || name.endsWith(".m4a") || name.endsWith(".flac"));
         }
     }
 
