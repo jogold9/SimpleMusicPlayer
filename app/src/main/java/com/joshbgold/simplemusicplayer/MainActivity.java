@@ -5,9 +5,10 @@ package com.joshbgold.simplemusicplayer;
  * I added the search feature. Feature to select media source in progress.
  */
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -44,7 +45,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private ImageButton btnPlaylist;
     private ImageButton btnRepeat;
     private ImageButton btnShuffle;
-    private ImageButton folder_icon;
+    private ImageButton btnFolder_icon;
     private SeekBar songProgressBar;
     private TextView songTitleLabel;
     private TextView songCurrentDurationLabel;
@@ -88,11 +89,13 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        ActionBar bar = getActionBar();
 
-        if (bar != null) {
-            bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+        android.app.ActionBar actionBar = getActionBar();
+
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
         }
+
 
         // All player buttons
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
@@ -103,7 +106,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         btnPlaylist = (ImageButton) findViewById(R.id.btnPlaylist);
         btnRepeat = (ImageButton) findViewById(R.id.btnRepeat);
         btnShuffle = (ImageButton) findViewById(R.id.btnShuffle);
-        folder_icon = (ImageButton) findViewById(R.id.folder_icon);
+        btnFolder_icon = (ImageButton) findViewById(R.id.folder_icon);
         songProgressBar = (SeekBar) findViewById(R.id.songProgressBar);
         songTitleLabel = (TextView) findViewById(R.id.songTitle);
         songCurrentDurationLabel = (TextView) findViewById(R.id.songCurrentDurationLabel);
@@ -144,7 +147,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
          * Button Click event for choosing a folder where music is kept
          * More info on Directory Picker can be found here: https://www.bgreco.net/directorypicker/readme.html
          * */
-        folder_icon.setOnClickListener(new View.OnClickListener() {
+        btnFolder_icon.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -155,6 +158,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                 //can user select directories or not
                 intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
                 intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);  //Prevents new items folder & file creation.
+
+                //Stop mediaPlayer if present so that I do not have multiple mediaPlayers running later on when returning to this activity
+                if (mediaPlayer != null) {
+                    mediaPlayer.release();
+                }
 
                 startActivityForResult(intent, REQUEST_SAVE);
             }
@@ -179,8 +187,18 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
                     mediaPlayer.start();
                     btnPlay.setImageResource(R.drawable.ic_av_pause_circle_fill);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Oh noes! No songs found.  Please click folder icon at top right and select your music" +
-                            " folder. ", Toast.LENGTH_LONG).show();
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Oh noes!")
+                            .setMessage("No songs found.  Please click folder icon at top right and select your music folder." + "\n" + "\n" +
+                                    "You may want to look in folders called sdcard or storage.")
+                            .setCancelable(false)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing except close the alert dialog box
+                                }
+                            })
+                            .setIcon(R.drawable.ic_hardware_headset)
+                            .show();
                 }
             }
         });
@@ -349,7 +367,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         /*    songArtist = data.getExtras().getString("artist");
             songAlbum = data.getExtras().getString("album");*/
             // play selected song
-            if (!"".equals(songTitle) && songTitle != null && !"".equals(songPath) && songPath != null) {
+            if (!"" .equals(songTitle) && songTitle != null && !"" .equals(songPath) && songPath != null) {
                 playSong(currentSongIndex, songTitle, songPath);
             }
 

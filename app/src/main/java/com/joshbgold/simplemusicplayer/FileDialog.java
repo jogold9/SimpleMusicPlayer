@@ -74,9 +74,9 @@ public class FileDialog extends ListActivity {
 
         setContentView(R.layout.file_dialog_main);
 
-        ActionBar bar = getActionBar();
-        if (bar != null) {
-            bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
         }
 
         //Toast.makeText(getApplicationContext(), "Please select the folder where your music lives", Toast.LENGTH_LONG).show();
