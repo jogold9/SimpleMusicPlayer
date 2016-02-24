@@ -587,4 +587,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         return sharedPreferences.getString(key, value);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mediaPlayer.stop();
+        finish();
+    }
 }
