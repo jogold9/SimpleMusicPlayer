@@ -2,7 +2,7 @@ package com.joshbgold.simplemusicplayer;
 
 /**
  * Based on code from Ravi Tamada http://www.androidhive.info/2012/03/android-building-audio-player-tutorial/
- * I added the search feature. Feature to select media source in progress.
+ * I added the search feature, and a feature to select the media source.
  */
 
 import android.app.Activity;
