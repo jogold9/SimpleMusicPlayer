@@ -162,7 +162,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
                 //Stop mediaPlayer if present so that I do not have multiple mediaPlayers running later on when returning to this activity
                 if (mediaPlayer != null) {
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.stop();
+                    }
                     mediaPlayer.release();
+                    mediaPlayer = null;
                 }
 
                 startActivityForResult(intent, REQUEST_SAVE);
@@ -368,7 +372,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         /*    songArtist = data.getExtras().getString("artist");
             songAlbum = data.getExtras().getString("album");*/
             // play selected song
-            if (!"" .equals(songTitle) && songTitle != null && !"" .equals(songPath) && songPath != null) {
+            if (!"".equals(songTitle) && songTitle != null && !"".equals(songPath) && songPath != null) {
                 playSong(currentSongIndex, songTitle, songPath);
             }
 
