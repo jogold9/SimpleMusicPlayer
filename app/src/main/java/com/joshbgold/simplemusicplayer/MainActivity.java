@@ -92,6 +92,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
         android.app.ActionBar actionBar = getActionBar();
 
+        //Change action bar color
         if (actionBar != null) {
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
         }
@@ -361,7 +362,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
             currentSongIndex = data.getExtras().getInt("songIndex");
-            //songUniqueID = data.getExtras().getString("songUniqueID");
+            songUniqueID = data.getExtras().getString("songUniqueID");
             songTitle = data.getExtras().getString("songTitle");
             songPath = data.getExtras().getString("songPath");
         /*    songArtist = data.getExtras().getString("artist");
@@ -563,24 +564,6 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
         return super.onCreateOptionsMenu(menu);
     }
-
-    /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                //launch settings activity
-                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
-
-   /* public String getFolderPath() {
-        return folderPath;
-    }*/
 
     //get prefs
     public String loadPrefs(String key, String value) {
