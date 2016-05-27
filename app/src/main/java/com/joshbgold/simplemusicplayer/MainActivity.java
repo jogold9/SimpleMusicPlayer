@@ -17,9 +17,9 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -35,6 +35,10 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
     private static final int REQUEST_SAVE = 101;
     private static final int REQUEST_LOAD = 102;
+    private static final int RED = 0;
+    private static final int BLUE = 1;
+    private static final int GREEN = 2;
+    private static final int GRAY = 3;
 
     //variables for layout items
     private ImageButton btnPlay;
@@ -559,18 +563,18 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         mediaPlayer.stop();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
     //get prefs
     public String loadPrefs(String key, String value) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPreferences = getSharedPreferences("SimpleMusicPrefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString(key, value);
+    }
+
+    //save prefs
+    public void savePrefs(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences("SimpleMusicPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
     }
 
     @Override
@@ -578,5 +582,75 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         super.onBackPressed();
         mediaPlayer.stop();
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar, menu);
+        menu.add(0, RED, 0, "Fire Theme");
+        menu.add(1, BLUE, 1, "Sky Theme");
+        menu.add(2, GREEN, 2, "Forest Theme");
+        menu.add(3, GRAY, 3, "Smoke Theme");
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String colorTheme = "blue";
+
+        //Views listed here for setting colors as per user preferences
+        android.app.ActionBar actionBar = getActionBar();
+        View mainView = findViewById(R.id.main_layout);
+        View headerView = findViewById(R.id.player_header);
+        View footerView = findViewById(R.id.player_footer);
+
+        switch (item.getItemId()) {
+            case 0:
+                if (actionBar != null) {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#770F0F"))); //redPrimaryDark
+                }
+                headerView.setBackgroundColor(getResources().getColor(R.color.redPrimaryDark));
+                footerView.setBackgroundColor(getResources().getColor(R.color.redPrimaryDark));
+                mainView.setBackgroundColor(getResources().getColor(R.color.redPrimary));
+                colorTheme = "red";
+                savePrefs("color", colorTheme);
+                return super.onOptionsItemSelected(item);
+
+            case 1:
+                if (actionBar != null) {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#303F9F"))); //redPrimaryDark
+                }
+                headerView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                footerView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                mainView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                colorTheme = "blue";
+                savePrefs("color", colorTheme);
+                return super.onOptionsItemSelected(item);
+            case 2:
+                if (actionBar != null) {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#094A1D"))); //redPrimaryDark
+                }
+                headerView.setBackgroundColor(getResources().getColor(R.color.greenPrimaryDark));
+                footerView.setBackgroundColor(getResources().getColor(R.color.greenPrimaryDark));
+                mainView.setBackgroundColor(getResources().getColor(R.color.greenPrimary));
+                colorTheme = "green";
+                savePrefs("color", colorTheme);
+                return super.onOptionsItemSelected(item);
+            case 3:
+                if (actionBar != null) {
+                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4B4B4B"))); //redPrimaryDark
+                }
+                headerView.setBackgroundColor(getResources().getColor(R.color.greyPrimaryDark));
+                footerView.setBackgroundColor(getResources().getColor(R.color.greyPrimaryDark));
+                mainView.setBackgroundColor(getResources().getColor(R.color.greyPrimary));
+                colorTheme = "grey";
+                savePrefs("color", colorTheme);
+                return super.onOptionsItemSelected(item);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
