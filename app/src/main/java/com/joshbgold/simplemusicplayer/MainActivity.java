@@ -5,6 +5,7 @@ package com.joshbgold.simplemusicplayer;
  * I added the search feature, and a feature to select the media source.
  */
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -80,6 +81,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
     private int song_position;
     public String folderPath = "";
     public String musicFolderPath = "";
+    protected String colorTheme = "blue";
 
     public MainActivity(Context context) {
         this.context = context;
@@ -93,12 +95,25 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
+        //Views listed here for setting colors as per user preferences
         android.app.ActionBar actionBar = getActionBar();
+        View mainView = findViewById(R.id.main_layout);
+        View headerView = findViewById(R.id.player_header);
+        View footerView = findViewById(R.id.player_footer);
 
-        //Change action bar color
-        if (actionBar != null) {
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));  //sets action bar to color primary dark
+       colorTheme = loadPrefs("color", colorTheme);
+
+        if (colorTheme.equals("red")){
+            SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#770F0F")), getResources().getColor(R.color.redPrimaryDark), getResources().getColor(R.color.redPrimary));
+        }
+        else if (colorTheme.equals("green")){
+            SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#094A1D")), getResources().getColor(R.color.greenPrimaryDark), getResources().getColor(R.color.greenPrimary));
+        }
+        else if (colorTheme.equals("grey")){
+            SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#4B4B4B")), getResources().getColor(R.color.greyPrimaryDark), getResources().getColor(R.color.greyPrimary));
+        }
+        else {
+            //do nothing
         }
 
 
@@ -598,9 +613,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String colorTheme = "blue";
 
-        //Views listed here for setting colors as per user preferences
         android.app.ActionBar actionBar = getActionBar();
         View mainView = findViewById(R.id.main_layout);
         View headerView = findViewById(R.id.player_header);
@@ -608,43 +621,23 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
 
         switch (item.getItemId()) {
             case 0:
-                if (actionBar != null) {
-                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#770F0F"))); //redPrimaryDark
-                }
-                headerView.setBackgroundColor(getResources().getColor(R.color.redPrimaryDark));
-                footerView.setBackgroundColor(getResources().getColor(R.color.redPrimaryDark));
-                mainView.setBackgroundColor(getResources().getColor(R.color.redPrimary));
+                SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#770F0F")), getResources().getColor(R.color.redPrimaryDark), getResources().getColor(R.color.redPrimary));
                 colorTheme = "red";
                 savePrefs("color", colorTheme);
                 return super.onOptionsItemSelected(item);
 
             case 1:
-                if (actionBar != null) {
-                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#303F9F"))); //redPrimaryDark
-                }
-                headerView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                footerView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                mainView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#303F9F")), getResources().getColor(R.color.colorPrimaryDark), getResources().getColor(R.color.colorPrimary));
                 colorTheme = "blue";
                 savePrefs("color", colorTheme);
                 return super.onOptionsItemSelected(item);
             case 2:
-                if (actionBar != null) {
-                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#094A1D"))); //redPrimaryDark
-                }
-                headerView.setBackgroundColor(getResources().getColor(R.color.greenPrimaryDark));
-                footerView.setBackgroundColor(getResources().getColor(R.color.greenPrimaryDark));
-                mainView.setBackgroundColor(getResources().getColor(R.color.greenPrimary));
+                SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#094A1D")), getResources().getColor(R.color.greenPrimaryDark), getResources().getColor(R.color.greenPrimary));
                 colorTheme = "green";
                 savePrefs("color", colorTheme);
                 return super.onOptionsItemSelected(item);
             case 3:
-                if (actionBar != null) {
-                    actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4B4B4B"))); //redPrimaryDark
-                }
-                headerView.setBackgroundColor(getResources().getColor(R.color.greyPrimaryDark));
-                footerView.setBackgroundColor(getResources().getColor(R.color.greyPrimaryDark));
-                mainView.setBackgroundColor(getResources().getColor(R.color.greyPrimary));
+                SetBackgroundColor(actionBar, mainView, headerView, footerView, new ColorDrawable(Color.parseColor("#4B4B4B")), getResources().getColor(R.color.greyPrimaryDark), getResources().getColor(R.color.greyPrimary));
                 colorTheme = "grey";
                 savePrefs("color", colorTheme);
                 return super.onOptionsItemSelected(item);
@@ -652,5 +645,14 @@ public class MainActivity extends Activity implements MediaPlayer.OnCompletionLi
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void SetBackgroundColor(ActionBar actionBar, View mainView, View headerView, View footerView, ColorDrawable drawable, int color, int color2) {
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(drawable);
+        }
+        headerView.setBackgroundColor(color);
+        footerView.setBackgroundColor(color);
+        mainView.setBackgroundColor(color2);
     }
 }
